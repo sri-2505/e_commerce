@@ -1,0 +1,35 @@
+{% extends "shop/layouts/main.html" %}
+
+{% block title %}
+  Register with shoppify
+{% endblock title %}
+
+{% block content %}
+<div class='container' style='margin-top:70px'>
+    <div class='row'>
+      <div class='col-12'>
+        <h1>Products</h1>
+      </div>
+    </div>
+
+    <div class='row'>
+        <div class='col-3'>
+            <div class="card-group">
+                {% for product in products %}
+                <div class="card">
+                  <img src="{{ product.product_image.url }}" class="card-img-top" alt="...">
+                  <div class="card-body">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text">{{ product.description }}</p>
+                    {% comment %} <a href="{% url 'product' product.name %}" class="btn btn-warning">View Products</a> {% endcomment %}
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+          </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+
