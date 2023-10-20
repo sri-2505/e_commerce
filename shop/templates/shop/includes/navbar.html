@@ -7,13 +7,28 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{% url 'home'%}">Home</a>
+            <a class="nav-link active" aria-current="page" href="{% url 'home'%}"><i class='bi bi-house-fill'></i> Home</a>
           </li>
+
+          {% if request.user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'home'%}"><i class='bi bi-person-fill'></i> {{ request.user }}</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'carts'%} "><i class='bi bi-cart'></i> Cart</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'logout'%} "><i class='bi bi-box-arrow-left'></i> Logout</a>
+            </li>
+          {% else %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'register'%} ">Register</a>
+            <a class="nav-link" href="{% url 'login'%} "><i class='bi bi-box-arrow-in-right'></i> Login</a>
           </li>
+          {% endif %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'categories'%} ">Categories</a>
+            <a class="nav-link" href="{% url 'categories'%} "><i class='bi bi-collection-fill'></i> Categories</a>
           </li>
         </ul>
       </div>

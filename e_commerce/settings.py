@@ -47,7 +47,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Custom apps
-    'shop'
+    'shop',
+
+    # libraries
+    'django_extensions'
 ]
 
 MIDDLEWARE = [

@@ -4,3 +4,17 @@
     height: 60vh;
     overflow: hidden;
 } 
+
+.old_price {
+    font-weight: bold;
+    color: red;
+    padding: 2px 4px;
+}
+
+.selling_price {
+    font-weight: bold;
+    background-color: green;
+    color: white;
+    padding: 2px 4px;
+    border-radius: 5px;
+}

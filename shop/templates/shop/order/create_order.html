@@ -1,0 +1,145 @@
+{% extends "shop/layouts/main.html" %}
+
+{% block title %}
+  Buy now
+{% endblock title %}
+
+{% block content %}
+
+<div class='container' style='margin-top:70px'>
+  {% include "shop/layouts/breadcrumb.html" %}
+
+  <!--Alert messge-->
+  {% include "shop/includes/message.html" %}
+    <div class='row'>
+      <div class='col-12'>
+        <h1>Place you order</h1>
+        <hr/>
+      </div>
+    </div>
+  </div>
+
+  <div class='container'>
+      <div class='row'>
+        <!--Order form-->
+        <div class='col-6'>
+          <form method='post'>
+            {% csrf_token %}
+
+          {% if product %}
+            <!--Sent the product id and quantity-->
+            <input value = {{ product.id }} type = "hidden" name="product_id"/>                
+            <input value = {{ product.order_quantity }} type = "hidden" name="order_quantity"/>   
+            <input value = {{ product.order_amount }} type = "hidden" name="order_amount"/>   
+          {% endif %}             
+          
+            <!--State-->
+          <div class="mb-3">
+            <label for="orderForm" class="form-label">State</label>
+            {{ form.state }}
+            {% if form.errors.state %}
+              <div class="text-danger">
+                {{ form.errors.state }}
+              </div>
+            {% endif %}
+          </div>
+          
+          <!--District-->
+          <div class="mb-3">
+            <label for="orderForm" class="form-label">District</label>
+            {{ form.district }}
+            {% if form.errors.district %}
+              <div class="text-danger">
+                {{ form.errors.district }}
+              </div>
+            {% endif %}
+          </div>
+
+          <!--City-->
+          <div class="mb-3">
+            <label for="orderForm" class="form-label">City</label>
+            {{ form.city }}
+            {% if form.errors.city %}
+              <div class="text-danger">
+                {{ form.errors.city }}
+              </div>
+            {% endif %}
+          </div>
+
+          <!--Street name-->
+          <div class="mb-3">
+            <label for="orderForm" class="form-label">Street name</label>
+            {{ form.street_name }}
+            {% if form.errors.street_name %}
+              <div class="text-danger">
+                {{ form.errors.street_name }}
+              </div>
+            {% endif %}
+            </div>
+
+          <!--Pincode -->
+          <div class="mb-3">
+            <label for="orderForm" class="form-label">Pincode</label>
+            {{ form.pincode }}
+            {% if form.errors.pincode %}
+              <div class="text-danger">
+                {{ form.errors.pincode }}
+              </div>
+            {% endif %}
+          </div>
+
+          <!--Payment type -->
+          <div class="mb-3">
+            <label for="orderForm" class="form-label">Payment type</label>
+            {{ form.payment_type }}
+            {% if form.errors.payment_type %}
+              <div class="text-danger">
+                {{ form.errors.payment_type }}
+              </div>
+            {% endif %}
+          </div>
+
+          <!--Submit-->
+          <div class="mb-3">
+            <button class="btn btn-primary" type="submit">Place order</button>
+          </div>
+        </form>
+        </div>
+
+        <!--Product Details-->
+        {% if products %}
+          <div class='col-6'>
+            {% for product in products %}
+              {{ product }}
+            {% endfor %}
+          </div>
+
+        {% else %}
+        <div class='col-6'>
+            {{ product }}
+        </div>
+        {% endif %}
+  
+      </div>
+    </div>
+  
+    {% comment %} Dependent fields {% endcomment %}
+    {% comment %} <script>
+      $(document).ready(function() {
+        $('#state').on('click', function() {
+          var state = $(this).val();
+          // district should be get form database with ajax request.
+          var data = {{ districts|safe }}
+          
+          $("#district").empty();
+          $.each(data, function(key, value) {
+              $("#district").append($('<option>', {
+                  value: value,
+                  text: value
+              }));
+          });
+        });
+      });
+  </script> {% endcomment %}
+
+{% endblock content %}
