@@ -1,0 +1,139 @@
+{% load static %}
+
+
+{% comment %} <ul>
+  {% for category in categories_with_data %}
+    <li>{{ category.name }}</li>
+    <ul>
+      {% for subcategory in category.all_subcategories %}
+        <li>{{ subcategory.name }}</li>
+        <ul>
+          {% for product in subcategory.limited_products %}
+            <li>{{ product.name }}</li>
+          {% endfor %}
+        </ul>
+      {% endfor %}
+    </ul>
+  {% endfor %}
+</ul>
+ {% endcomment %}
+
+
+
+
+
+
+<section id="categoryWomen">
+    <div class="container">
+      <div class="row h-100">
+        <div class="col-lg-7 mx-auto text-center mb-6">
+          <h5 class="fw-bold fs-3 fs-lg-5 lh-sm mb-3">Shop By Category</h5>
+        </div>
+        <div class="col-12">
+          <nav>
+            <!--Category-->
+            <div class="nav nav-tabs majestic-tabs mb-4 justify-content-center" id="nav-tab" role="tablist">
+              {% for category in categories_with_data %}
+                <button class="nav-link {% if forloop.counter == 1 %} active {% endif %}" id="nav-{{ category.name }}-tab" data-bs-toggle="tab" data-bs-target="#nav-{{ category.name }}" type="button" role="tab" aria-controls="nav-{{ category.name }}" aria-selected="true">{{ category.name|capfirst }}</button>
+              {% endfor %}
+            </div>
+
+            <div class="tab-content" id="nav-tabContent">
+              {% for category in categories_with_data %}
+                <div class="tab-pane fade show {% if forloop.counter == 1 %} active {% endif %}" id="nav-{{ category.name }}" role="tabpanel" aria-labelledby="nav-{{ category.name }}-tab">
+
+                  <ul class="nav nav-pills justify-content-center mb-5" id="pills-tab-{{ category.name }}" role="tablist">
+                    {% for subcategory in category.all_subcategories %}
+                      <li class="nav-item" role="presentation">
+                        <button class="nav-link {% if forloop.counter == 1 %} active {% endif %}" id="pills-{{ subcategory.name }}-tab" data-bs-toggle="pill" data-bs-target="#pills-{{ subcategory.name }}" type="button" role="tab" aria-controls="pills-{{ subcategory.name }}" aria-selected="true">{{ subcategory.name|capfirst }}</button>
+                      </li>
+                    {% endfor %}
+                  </ul>
+
+                  <div class="tab-content" id="pills-tabContent{{ category.name|capfirst }}">
+                    {% for subcategory in category.all_subcategories %}
+                    <div class="tab-pane fade {% if forloop.counter == 1 %} show active {% endif %}" id="pills-{{ subcategory.name }}" role="tabpanel" aria-labelledby="pills-{{ subcategory.name }}-tab">
+                      <div class="carousel slide" id="carouselCategory{{ subcategory.name|capfirst }}" data-bs-touch="false" data-bs-interval="false">
+                        <div class="carousel-inner">
+
+                          <!--carousel 1-->
+                          {% if subcategory.limited_products|slice:"0:4" %}
+                          <div class="carousel-item active" data-bs-interval="10000">
+                            <div class="row h-100 align-items-center g-2">
+                              <!--products-->
+                              {% for product in subcategory.limited_products|slice:"0:4" %}
+                                <div class="col-sm-6 col-md-3 mb-3 mb-md-0 h-100">
+                                  <div class="card card-span h-100 text-white"><img class="img-fluid h-100" src="{% static product.product_image %}" alt="..." />
+                                    <div class="card-img-overlay ps-0"> </div>
+                                    <div class="card-body ps-0 bg-200">
+                                      <h5 class="fw-bold text-1000 text-truncate">{{ product.name }}</h5>
+                                      <div class="fw-bold"><span class="text-600 me-2 text-decoration-line-through">{{ product.original_price }}</span><span class="text-primary">{{ product.original_price }}</span></div>
+                                    </div><a class="stretched-link" href="#"></a>
+                                  </div>
+                                </div>
+                              {% endfor %}
+                            </div>
+                          </div>
+                          {% endif %}
+                          
+                          <!--carousel 2-->
+                          {% if subcategory.limited_products|slice:"4:8" %}
+                          <div class="carousel-item" data-bs-interval="5000">
+                            <div class="row h-100 align-items-center g-2">
+                              <!--products-->
+                              {% for product in subcategory.limited_products|slice:"4:8" %}
+                                <div class="col-sm-6 col-md-3 mb-3 mb-md-0 h-100">
+                                  <div class="card card-span h-100 text-white"><img class="img-fluid h-100" src="{% static product.product_image %}" alt="..." />
+                                    <div class="card-img-overlay ps-0"> </div>
+                                    <div class="card-body ps-0 bg-200">
+                                      <h5 class="fw-bold text-1000 text-truncate">{{ product.name }}</h5>
+                                      <div class="fw-bold"><span class="text-600 me-2 text-decoration-line-through">{{ product.original_price }}</span><span class="text-primary">{{ product.original_price }}</span></div>
+                                    </div><a class="stretched-link" href="#"></a>
+                                  </div>
+                                </div>
+                              {% endfor %}
+                            </div>
+                          </div>
+                          {% endif %}
+                          
+                          <!--carousel 3-->
+                          {% if subcategory.limited_products|slice:"8:12" %}
+                            <div class="carousel-item" data-bs-interval="3000">
+                              <div class="row h-100 align-items-center g-2">
+                                <!--products-->
+                                {% for product in subcategory.limited_products|slice:"8:12" %}
+                                  <div class="col-sm-6 col-md-3 mb-3 mb-md-0 h-100">
+                                    <div class="card card-span h-100 text-white"><img class="img-fluid h-100" src="{% static product.product_image %}" alt="..." />
+                                      <div class="card-img-overlay ps-0"> </div>
+                                      <div class="card-body ps-0 bg-200">
+                                        <h5 class="fw-bold text-1000 text-truncate">{{ product.name }}</h5>
+                                        <div class="fw-bold"><span class="text-600 me-2 text-decoration-line-through">{{ product.original_price }}</span><span class="text-primary">{{ product.original_price }}</span></div>
+                                      </div><a class="stretched-link" href="#"></a>
+                                    </div>
+                                  </div>
+                                {% endfor %}
+                              </div>
+                            </div>
+                          {% endif %}
+
+                          {% if best_deals|slice:"4:8" %}
+                            <div class="row">
+                              <button class="carousel-control-prev" type="button" data-bs-target="#carouselCategory{{ subcategory.name|capfirst }}" data-bs-slide="prev"><span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="visually-hidden">Previous</span></button>
+                              <button class="carousel-control-next" type="button" data-bs-target="#carouselCategory{{ subcategory.name|capfirst }}" data-bs-slide="next"><span class="carousel-control-next-icon" aria-hidden="true"></span><span class="visually-hidden">Next </span></button>
+                            </div>
+                          {% endif %}
+
+                        </div>
+                      </div>
+                      <div class="col-12 d-flex justify-content-center mt-5"> <a class="btn btn-lg btn-dark" href="#!">View All </a></div>
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </section>
