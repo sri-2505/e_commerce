@@ -19,7 +19,7 @@ s3 = boto3.client('s3')
 
 # S3 bucket and object key where the .env file is located
 s3_bucket = 'majestic-env'
-s3_object_key = 's3://majestic-env/.env'
+s3_object_key = '.env'
 
 # Download the .env file from S3
 s3.download_file(s3_bucket, s3_object_key, '.env')
@@ -38,7 +38,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['43.204.147.27']
 
