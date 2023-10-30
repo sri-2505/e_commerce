@@ -28,8 +28,9 @@ load_dotenv()
 
 # home page
 def home(request):
-    products = Product.objects.filter(status = 1, trending = 1).order_by('updated_at')[:5]
-    return render(request, 'shop/index.html', {'products': products})
+    # products = Product.objects.filter(status = 1, trending = 1).order_by('updated_at')[:5]
+    # return render(request, 'shop/index.html', {'products': products})
+    return HttpResponse('worked');
 
 # registeration
 def register(request):
