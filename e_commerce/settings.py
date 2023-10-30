@@ -14,16 +14,6 @@ from pathlib import Path
 import os
 import boto3
 
-# Initialize the S3 client using the IAM role credentials
-s3 = boto3.client('s3')
-
-# S3 bucket and object key where the .env file is located
-s3_bucket = 'majestic-env'
-s3_object_key = '.env'
-
-# Download the .env file from S3
-s3.download_file(s3_bucket, s3_object_key, '.env')
-
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -34,13 +24,24 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY')
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['43.204.147.27']
+if not DEBUG:
+    # Initialize the S3 client using the IAM role credentials
+    s3 = boto3.client('s3')
+
+    # S3 bucket and object key where the .env file is located
+    s3_bucket = 'majestic-env'
+    s3_object_key = '.env'
+
+    # Download the .env file from S3
+    s3.download_file(s3_bucket, s3_object_key, '.env')
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = os.getenv('SECRET_KEY')
+
+ALLOWED_HOSTS = ['13.233.157.185']
 
 
 # Application definition
@@ -72,6 +73,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'e_commerce.urls'
@@ -150,6 +152,8 @@ MEDIA_ROOT = BASE_DIR/'static'
 STATICFILES_DIRS = [
     BASE_DIR/'static'
 ]
+
+STATIC_ROOT = 'staticfiles/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
