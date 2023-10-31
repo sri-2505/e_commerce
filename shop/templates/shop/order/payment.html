@@ -1,0 +1,34 @@
+{% extends "shop/layouts/main.html" %}
+
+{% block content %}
+
+<form method="POST">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+    var options = {
+        key: "{{ razorpay_key }}",
+        amount: "{{ amount }}", 
+        currency: "{{ currency }}",
+        description: "Test Transaction",
+        // image: "https://example.com/your_logo",
+        order_id: "{{ razorpay_order_id }}",
+        callback_url: "{{ callback_url }}",
+        redirect: true,
+        prefill: {
+            "name": "{{ request.user }}",
+            "email": "{{ reqeust.user.email }}",
+        },
+        notes: {
+            "address": "Razorpay Corporate Office"
+        },
+        theme: {
+            "color": "#808080"
+        }
+    };
+    var razorpay = new Razorpay(options);
+    razorpay.open();
+    </script>
+    <input type="hidden" custom="Hidden Element" name="hidden">
+</form>
+
+{% endblock %}

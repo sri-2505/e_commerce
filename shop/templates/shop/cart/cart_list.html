@@ -1,0 +1,60 @@
+{% extends "shop/layouts/main.html" %}
+
+{% block title %}
+  Cart List
+{% endblock title %}
+
+{% block content %}
+
+<div class='container' style='margin-top:70px'>
+  {% include "shop/layouts/breadcrumb.html" %}
+
+  <!--Alert messge-->
+  {% include "shop/includes/message.html" %}
+    <div class='row'>
+      <div class='col-12'>
+        <h1>Cart List</h1>
+        <hr/>
+      </div>
+    </div>
+  </div>
+
+  <div class='container'>
+      <div class='row'>
+        <div class='col-12'>
+            <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Image</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">quantity</th>
+                    <th scope="col">Price</th>
+                    <th scope="col" colspan="2">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for cart in carts %}
+                    <tr>
+                        <th scope="row"> {{ forloop.counter }} </th>
+                        <td>{{ cart.product.product_image }}</td>
+                        <td>{{ cart.product.name}}</td>
+                        <td>{{ cart.quantity }}</td>
+                        <td>{{ cart.total_cost }}</td>
+                        <td colspan ="2">
+                            <a class='btn btn-small' href = "{% url 'product' cart.product.name %}"><i class='bi bi-pencil-square'></i></a>
+                            <a class='btn btn-small' href = "{% url 'cart_delete' cart.id %}"><i class='bi bi-x-square'></i></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+
+                {% if not carts %}
+                    <td colspan="6" class='text-center p-5'>No carts available</td>
+                {% endif %}
+                </tbody>
+              </table>
+        </div>
+      </div>
+    </div>
+    
+{% endblock content %}
