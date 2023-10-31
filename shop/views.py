@@ -1,22 +1,34 @@
 from django.shortcuts import render, redirect
-from shop.forms.userRegisterationForm import CustomUserForm
-from shop.forms.LoginForm import LoginForm
-from shop.forms.orderForm import OrderForm
-from .models import Category
-from .models import Product
-from .models import Cart
-from .models import Order
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
-import json
-from utils.constants import *
+from django.http import JsonResponse, HttpResponse
 from django.utils import timezone
+from django.db.models import F, ExpressionWrapper, FloatField, Prefetch, Count
+
+# forms
+from shop.forms.userRegisterationForm import CustomUserForm
+from shop.forms.LoginForm import LoginForm
+from shop.forms.orderForm import OrderForm
+
+# models
+from .models import (
+    Category,
+    SubCategory,
+    Product,
+    Cart,
+    Order,
+    OrderItem
+    )
+
+# core python
+import json
 import os
 from dotenv import load_dotenv
 
+# constant helper
+from utils.constants import *
 from utils.helper import (
     razorpay_login,
     getRazorPayAmount,
@@ -28,8 +40,26 @@ load_dotenv()
 
 # home page
 def home(request):
-    products = Product.objects.filter(status=1, trending=1).order_by('updated_at')[:5]
-    return render(request, 'shop/index.html', {'products': products})
+    best_deals = Product.objects.active_products().annotate(price_difference = ExpressionWrapper(
+        ((F('original_price') - F('selling_price')) * F('original_price')) * 100,
+        output_field = FloatField()
+    )).order_by('price_difference').values()[:12]
+
+    new_arrivals = Product.objects.active_products().order_by('created_at').values()[:12]
+
+    categories_with_data =  Category.objects.prefetch_related(
+        Prefetch('subcategories',
+                queryset = SubCategory.objects.prefetch_related(
+                    Prefetch(
+                        'products',
+                        queryset = Product.objects.all()[:12],
+                        to_attr = 'limited_products'
+                       )
+                    ),
+                to_attr = 'all_subcategories'
+                )
+            )
+    return render(request, 'shop/index.html', {'best_deals': best_deals, 'new_arrivals': new_arrivals, 'categories_with_data': categories_with_data})
 
 
 # registeration
@@ -78,7 +108,7 @@ def logout_page(request):
 
 # Categories
 def categories(request):
-    categories = Category.objects.filter(status=1)
+    categories = Category.objects.all()
     return render(request, 'shop/categories.html', {'categories': categories})
 
 
