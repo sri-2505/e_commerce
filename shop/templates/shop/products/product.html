@@ -1,7 +1,7 @@
 {% extends "shop/layouts/main.html" %}
 
 {% block title %}
-  Register with shoppify
+Register with shoppify
 {% endblock title %}
 
 {% block content %}
@@ -12,10 +12,10 @@
     {% include "shop/includes/message.html" %}
 
     <div class='row'>
-      <div class='col-12'>
-        <h1>Product Details</h1>
-        <hr/>
-      </div>
+        <div class='col-12'>
+            <h1>Product Details</h1>
+            <hr/>
+        </div>
     </div>
 </div>
 
@@ -23,77 +23,78 @@
 <div class='container'>
     <div class="mb-3 col-md-12">
         <div class="row">
-          <div class="col-md-4">
-            <img src="{{ product.product_image.url }}" class="img-fluid rounded-start p-2" alt="...">
-          </div>
-          <div class="col-md-8 p-3">
-            <div class="card-body">
-                <h5 class="card-title" style="display: inline;">{{ product.name }}</h5>
-                {% if product.trending %}
-                  <span class='badge bg-warning'>trending</span>
-                {% endif %}
-              <p class="card-text">{{ product.description }}</p>
-              <h6 class='my-2 text-danger'>Current price: Rs. <s>{{ product.original_price }}</s> </h6>
-              <h5 class='my-2 text-info'>Selling price: Rs. {{ product.selling_price }} </h5>
-              <div class='my-3'>
-                {% if product.quantity > 0 %}
-                {% csrf_token %}
-                  <input type='number' min = 1 max = {{ product.quantity }} value = 1 name = 'quantity' id = 'quantity'/>
-                  <button class='btn btn-primary' id='add-to-cart'><i class='bi bi-cart'></i> Add to Cart</button>
-                {% else %}
-                  <button class='btn btn-secondary'><i class='bi bi-dash'></i> Out of stock</button>
-                {% endif %}
-                <a class='btn btn-warning' href='{% url "create_order" %}' id = 'buy_now'><i class='bi bi-heart'></i> Buy now</a>
-              </div>
+            <div class="col-md-4">
+                <img src="{{ product.product_image.url }}" class="img-fluid rounded-start p-2" alt="...">
             </div>
-          </div>
+            <div class="col-md-8 p-3">
+                <div class="card-body">
+                    <h5 class="card-title" style="display: inline;">{{ product.name }}</h5>
+                    {% if product.trending %}
+                    <span class='badge bg-warning'>trending</span>
+                    {% endif %}
+                    <p class="card-text">{{ product.description }}</p>
+                    <h6 class='my-2 text-danger'>Current price: Rs. <s>{{ product.original_price }}</s></h6>
+                    <h5 class='my-2 text-info'>Selling price: Rs. {{ product.selling_price }} </h5>
+                    <div class='my-3'>
+                        {% if product.quantity > 0 %}
+                        {% csrf_token %}
+                        <input type='number' min=1 max={{ product.quantity }} value=1 name='quantity' id='quantity'/>
+                        <button class='btn btn-primary' id='add-to-cart'><i class='bi bi-cart'></i> Add to Cart</button>
+                        {% else %}
+                        <button class='btn btn-secondary'><i class='bi bi-dash'></i> Out of stock</button>
+                        {% endif %}
+                        <a class='btn btn-warning' href='{% url "create_order" %}' id='buy_now'><i
+                                class='bi bi-heart'></i> Buy now</a>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
+    </div>
 </div>
 
 <script>
 
-  $(document).ready(function() {
-    $('#add-to-cart').on('click', function() {
-      var quantity = $('#quantity').val();
-      var context = {
-          'quantity': parseInt(quantity, 10),
-          'product_id': "{{ product.id }}"
-      };
-      
-      var csrf_token = $('input[name="csrfmiddlewaretoken"]').val();
+    $(document).ready(function() {
+      $('#add-to-cart').on('click', function() {
+        var quantity = $('#quantity').val();
+        var context = {
+            'quantity': parseInt(quantity, 10),
+            'product_id': "{{ product.id }}"
+        };
 
-      $.ajax({
-        type: 'POST',
-        url: '/add_cart',
-        data: JSON.stringify(context),
-        contentType: 'application/json',
-        headers: {
-          'X-CSRFToken': csrf_token
-        },
-        success: function(data) {
-          alert(data['status'])
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-          console.log('Error: ' + textStatus);
-        }
-        });
+        var csrf_token = $('input[name="csrfmiddlewaretoken"]').val();
 
+        $.ajax({
+          type: 'POST',
+          url: '/add_cart',
+          data: JSON.stringify(context),
+          contentType: 'application/json',
+          headers: {
+            'X-CSRFToken': csrf_token
+          },
+          success: function(data) {
+            alert(data['status'])
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+            console.log('Error: ' + textStatus);
+          }
+          });
+
+      });
+
+      $('#buy_now').on('click', function(event) {
+          event.preventDefault(); // Prevent the link from navigating immediately
+          // Get the value from the input field
+          var quantity = parseInt($("#quantity").val(), 10);
+          var product_id = "{{ product.id }}"
+
+          // Construct the link with the quantity value
+          var buyNowLink = "{% url 'create_order' %}?quantity=" + quantity + "&product_id=" + product_id;
+
+          // Navigate to the constructed link
+          window.location.href = buyNowLink;
+      });
     });
-
-    $('#buy_now').on('click', function(event) {
-        event.preventDefault(); // Prevent the link from navigating immediately
-        // Get the value from the input field
-        var quantity = parseInt($("#quantity").val(), 10);
-        var product_id = "{{ product.id }}"
-        
-        // Construct the link with the quantity value
-        var buyNowLink = "{% url 'create_order' %}?quantity=" + quantity + "&product_id=" + product_id;
-        
-        // Navigate to the constructed link
-        window.location.href = buyNowLink;
-    });
-  });
 
 </script>
 

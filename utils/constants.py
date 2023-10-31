@@ -73,39 +73,41 @@ TENKASI = 'tenkasi'
 KANNIYAKUMARI = 'kanniyakumari'
 
 DISTRICTS = {
-    "chennai": CHENNAI,
-    "kancheepuram": KANCHEEPURAM,
-    "tiruvallur": TIRUVALLUR,
-    "cuddalore": CUDDALORE,
-    "villupuram": VILLUPURAM,
-    "vellore": VELLORE,
-    "tiruvannamalai": TIRUVANNAMALAI,
-    "dharmapuri": DHARMAPURI,
-    "krishnagiri": KRISHNAGIRI,
-    # "salem": SALEM,
-    # NAMAKKAL = 'namakkal'
-    # ERODE = 'erode'
-    # COIMBATORE = 'coimbatore'
-    # OOTY = 'ooty'
-    # TIRUPPUR = 'tiruppur'
-    # KARUR = 'karur'
-    # PERAMBALUR = 'perambalur'
-    # TIRUCHIRAPPALLI = 'tiruchirappalli'
-    # ARIYALUR = 'ariyalur'
-    # NAGAPATTINAM = 'nagapattinam'
-    # THANJAVUR = 'thanjavur'
-    # TIRUVARUR = 'tiruvarur'
-    # PUDUKKOTTAI = 'pudukkottai'
-    # SIVAGANGA = 'sivaganga'
-    # MADURAI = 'madurai'
-    # THENI = 'theni'
-    # DINDIGUL = 'dindigul'
-    # RAMANATHAPURAM = 'ramanathapuram'
-    # VIRUDHUNAGAR = 'virudhunagar'
-    # THOOTHUKUDI = 'thoothukudi'
-    # TIRUNELVELI = 'tirunelveli'
-    # TENKASI = 'tenkasi'
-    # KANNIYAKUMARI = 'kanniyakumari'
+    'chennai': CHENNAI,
+    'kancheepuram': KANCHEEPURAM,
+    'tiruvallur': TIRUVALLUR,
+    'cuddalore': CUDDALORE,
+    'villupuram': VILLUPURAM,
+    'vellore': VELLORE,
+    'tiruvannamalai': TIRUVANNAMALAI,
+    'dharmapuri': DHARMAPURI,
+    'krishnagiri': KRISHNAGIRI,
+    'salem': SALEM,
+    'namakkal': NAMAKKAL,
+    'erode': ERODE,
+    'coimbatore': COIMBATORE,
+    'ooty': OOTY,
+    'tiruppur': TIRUPPUR,
+    'karur': KARUR,
+    'perambalur': PERAMBALUR,
+    'tiruchirappalli': TIRUCHIRAPPALLI,
+    'ariyalur': ARIYALUR,
+    'nagapattinam': NAGAPATTINAM,
+    'thanjavur': THANJAVUR,
+    'tiruvarur': TIRUVARUR,
+    'pudukkottai': PUDUKKOTTAI,
+    'sivaganga': SIVAGANGA,
+    'madurai': MADURAI,
+    'theni': THENI,
+    'dindigul': DINDIGUL,
+    'ramanathapuram': RAMANATHAPURAM,
+    'virudhunagar': VIRUDHUNAGAR,
+    'thoothukudi': THOOTHUKUDI,
+    'tirunelveli': TIRUNELVELI,
+    'tenkasi': TENKASI,
+    'kanniyakumari': KANNIYAKUMARI
 }
 
+HTTP = 'http://'
+HTTPS = 'https://'
 

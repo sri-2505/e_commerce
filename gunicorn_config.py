@@ -1,10 +1,7 @@
 import multiprocessing
 
 # using the below calculation for better cpu usage
-# workers = multiprocessing.cpu_count() * 2 + 1
-
-# for free tier usage   
-workers = multiprocessing.cpu_count()
+workers = multiprocessing.cpu_count() * 2 + 1
 
 bind = '0.0.0.0:8000'
 
