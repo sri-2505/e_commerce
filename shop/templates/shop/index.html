@@ -2,95 +2,102 @@
 {% load static %}
 
 {% block title %}
-    <title>majestic | Landing, Ecommerce &amp; Business Templatee</title>
+<title>majestic | Landing, Ecommerce &amp; Business Templatee</title>
 {% endblock title %}
 
 {% block content %}
 
-    <!-- ===============================================-->
-    <!--    Main Content-->
-    <!-- ===============================================-->
-    <main class="main" id="top">
-        {% include "shop/includes/navbar.html" %}
+<!-- ===============================================-->
+<!--    Main Content-->
+<!-- ===============================================-->
+<main class="main" id="top">
+    {% include "shop/includes/navbar.html" %}
 
-        <section class="py-11 bg-light-gradient border-bottom border-white border-5">
-            <div class="bg-holder overlay overlay-light" style="background-image:url('{% static "images/gallery/header-bg.png" %}');background-size:cover;">
-            </div>
-            <!--/.bg-holder-->
-    
-            <div class="container">
-              <div class="row flex-center">
-                <div class="col-12 mb-10">
-                  <div class="d-flex align-items-center flex-column">
-                    <h1 class="fw-normal"> With an outstanding style, only for you</h1>
-                    <h1 class="fs-4 fs-lg-8 fs-md-6 fw-bold">Exclusively designed for you</h1>
-                  </div>
-                </div>
-              </div>
-            </div>
-        </section>
-
-        <!-- ============================================-->
-      <!-- <section> begin ============================-->
-      <section class="py-0" id="header" style="margin-top: -23rem !important;">
+    <section class="py-11 bg-light-gradient border-bottom border-white border-5">
+        <div class="bg-holder overlay overlay-light" style="background-image:url('{% static " images
+        /gallery/header-bg.png" %}');background-size:cover;">
+        </div>
+        <!--/.bg-holder-->
 
         <div class="container">
-          <div class="row g-0">
-            <div class="col-md-6">
-              <div class="card card-span h-100 text-white"> <img class="img-fluid" src="{% static 'images/gallery/her.png' %}" width="790" alt="..." />
-                <div class="card-img-overlay d-flex flex-center"> <a class="btn btn-lg btn-light" href="#!">For Her</a></div>
-              </div>
+            <div class="row flex-center">
+                <div class="col-12 mb-10">
+                    <div class="d-flex align-items-center flex-column">
+                        <h1 class="fw-normal"> With an outstanding style, only for you</h1>
+                        <h1 class="fs-4 fs-lg-8 fs-md-6 fw-bold">Exclusively designed for you</h1>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-6">
-              <div class="card card-span h-100 text-white"> <img class="img-fluid" src="{% static 'images/gallery/him.png' %}" width="790" alt="..." />
-                <div class="card-img-overlay d-flex flex-center"> <a class="btn btn-lg btn-light" href="#!">For Him </a></div>
-              </div>
+        </div>
+    </section>
+
+    <!-- ============================================-->
+    <!-- <section> begin ============================-->
+    <section class="py-0" id="header" style="margin-top: -23rem !important;">
+
+        <div class="container">
+            <div class="row g-0">
+                <div class="col-md-6">
+                    <div class="card card-span h-100 text-white"><img class="img-fluid"
+                                                                      src="{% static 'images/gallery/her.png' %}"
+                                                                      width="790" alt="..."/>
+                        <div class="card-img-overlay d-flex flex-center"><a class="btn btn-lg btn-light" href="#!">For
+                            Her</a></div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card card-span h-100 text-white"><img class="img-fluid"
+                                                                      src="{% static 'images/gallery/him.png' %}"
+                                                                      width="790" alt="..."/>
+                        <div class="card-img-overlay d-flex flex-center"><a class="btn btn-lg btn-light" href="#!">For
+                            Him </a></div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
         <!-- end of .container-->
 
-      </section>
-      <!-- <section> close ============================-->
-      <!-- ============================================-->
+    </section>
+    <!-- <section> close ============================-->
+    <!-- ============================================-->
 
-        <!--carousel-->
-        {% if best_deals %}
-          {% include "shop/includes/best_deals.html" %}        
-        {% endif %}
+    <!--carousel-->
+    {% if best_deals %}
+    {% include "shop/includes/best_deals.html" %}
+    {% endif %}
 
-        <!--Exclusive-->
-        {% include "shop/layouts/exclusive.html" %}
+    <!--Exclusive-->
+    {% include "shop/layouts/exclusive.html" %}
 
-        <!--new_arrivals-->
-        {% if new_arrivals %}
-          {% include "shop/layouts/new_arrivals.html" %}
-        {% endif %}
+    <!--new_arrivals-->
+    {% if new_arrivals %}
+    {% include "shop/layouts/new_arrivals.html" %}
+    {% endif %}
 
-        <!--category-->
-        {% include "shop/layouts/category.html" %}
+    <!--category-->
+    {% include "shop/layouts/category.html" %}
 
-        <!--uran_stories-->
-        {% include "shop/layouts/urban_stories.html" %}
+    <!--uran_stories-->
+    {% include "shop/layouts/urban_stories.html" %}
 
-        <!--best sellers-->
-        {% include "shop/layouts/best_sellers.html" %}
+    <!--best sellers-->
+    {% include "shop/layouts/best_sellers.html" %}
 
-        <!--outlet-->
-        {% include "shop/layouts/outlet.html" %}
+    <!--outlet-->
+    {% include "shop/layouts/outlet.html" %}
 
-        <!--Gentle formals-->
-        {% include "shop/layouts/gentle_formals.html" %}
+    <!--Gentle formals-->
+    {% include "shop/layouts/gentle_formals.html" %}
 
-        <!--blog list-->
-        {% include "shop/layouts/blog_list.html" %}
+    <!--blog list-->
+    {% include "shop/layouts/blog_list.html" %}
 
-        <!--blog list-->
-        {% include "shop/layouts/locations.html" %}
+    <!--blog list-->
+    {% include "shop/layouts/locations.html" %}
 
-        <!--blog list-->
-        {% include "shop/includes/footer.html" %}
+    <!--blog list-->
+    {% include "shop/includes/footer.html" %}
 
-    </main>
+</main>
 
 {% endblock content %}
