@@ -8,10 +8,10 @@ from utils.constants import *
 # give file name while uploading
 def getFileName(request, file_name) -> str:
     date_time = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-    new_file_name = "%s%s"%(date_time, file_name)
+    new_file_name = "%s%s" % (date_time, file_name)
     return os.path.join('uploads/', new_file_name)
 
-# Extending model managers 
+# Extending model managers
 class ProductManager(models.Manager):
     def active_products(self):
         return self.filter(status = 1)
@@ -63,14 +63,15 @@ class Product(models.Model):
     def __str__(self) -> str:
         return self.name
 
+
 # shopping cart
 class Cart(models.Model):
-    user = models.ForeignKey(User, on_delete = models.CASCADE)
-    product = models.ForeignKey(Product, on_delete = models.CASCADE)
-    quantity = models.IntegerField(null = False, blank = False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField(null=False, blank=False)
     # To add the blow columns to existing table first migrate with only default parameter and them migrate with auto_now 
-    created_at = models.DateTimeField(auto_now_add = True)
-    updated_at = models.DateTimeField(auto_now = True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         unique_together = ('user', 'product')
@@ -81,10 +82,10 @@ class Cart(models.Model):
 
     def __str__(self) -> str:
         return str(self.quantity)
-    
+
+
 # create order
 class Order(models.Model):
-
     payment_status = [
         ('completed', COMPLETED),
         ('pending', PENDING),
@@ -93,38 +94,39 @@ class Order(models.Model):
     ]
 
     order_status = [
-        ('shipped', SHIPPED), # on transport
-        ('delivered', DELIVERED), # order completed
-        ('in_progres', IN_PROGRES), # packing in progres
-        ('cancelled', CANCELLED) # order cancelled
+        ('shipped', SHIPPED),  # on transport
+        ('delivered', DELIVERED),  # order completed
+        ('in_progres', IN_PROGRES),  # packing in progres
+        ('cancelled', CANCELLED)  # order cancelled
     ]
 
-    user = models.ForeignKey(User, on_delete = models.CASCADE)
-    order_number = models.CharField(max_length = 100, null = False, blank = False)
-    amount = models.FloatField(default = 0.00, null = False, blank = False)
-    street_name = models.CharField(max_length = 100, null = False, blank = False)
-    city = models.CharField(max_length = 100, null = False, blank = False)
-    district = models.CharField(max_length = 100, null = False, blank = False)
-    state = models.CharField(max_length = 100, null = False, blank = False)
-    pincode = models.CharField(max_length = 100, null = False, blank = False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    order_number = models.CharField(max_length=100, null=False, blank=False)
+    amount = models.FloatField(default=0.00, null=False, blank=False)
+    street_name = models.CharField(max_length=100, null=False, blank=False)
+    city = models.CharField(max_length=100, null=False, blank=False)
+    district = models.CharField(max_length=100, null=False, blank=False)
+    state = models.CharField(max_length=100, null=False, blank=False)
+    pincode = models.CharField(max_length=100, null=False, blank=False)
     ordered_date = models.DateTimeField()
-    payment_type = models.CharField(max_length = 100, choices = PAYMENT_TYPES)
-    payment_status = models.CharField(max_length = 100, choices = payment_status)
-    order_status = models.CharField(max_length = 100, choices = order_status)
+    payment_type = models.CharField(max_length=100, choices=PAYMENT_TYPES)
+    payment_status = models.CharField(max_length=100, choices=payment_status)
+    order_status = models.CharField(max_length=100, choices=order_status)
     provider_order_id = models.CharField(
         max_length=100, null=False, blank=False
     )
     payment_id = models.CharField(
-        max_length = 100, null = False, blank = False
+        max_length=100, null=False, blank=False
     )
     signature_id = models.CharField(
-        max_length = 100, null = False, blank = False
+        max_length=100, null=False, blank=False
     )
-    created_at = models.DateTimeField(auto_now_add = True)
-    updated_at = models.DateTimeField(auto_now = True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
         return str(self.order_number)
+
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete = models.CASCADE)
@@ -132,6 +134,6 @@ class OrderItem(models.Model):
     quantity = models.IntegerField(default = 0)
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
-    
+
     class Meta:
         unique_together = ('order', 'product')

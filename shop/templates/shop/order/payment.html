@@ -15,19 +15,18 @@
         callback_url: "{{ callback_url }}",
         redirect: true,
         prefill: {
-            "name": "Gaurav Kumar",
-            "email": "gaurav.kumar@example.com",
-            "contact": "9999999999"
+            "name": "{{ request.user }}",
+            "email": "{{ reqeust.user.email }}",
         },
         notes: {
             "address": "Razorpay Corporate Office"
         },
         theme: {
-            "color": "#3399cc"
+            "color": "#808080"
         }
     };
-    var rzp1 = new Razorpay(options);
-    rzp1.open();
+    var razorpay = new Razorpay(options);
+    razorpay.open();
     </script>
     <input type="hidden" custom="Hidden Element" name="hidden">
 </form>

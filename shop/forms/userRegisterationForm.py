@@ -7,10 +7,21 @@ from django import forms
 # TODO::add more user registration fields(customer user model)
 class CustomUserForm(UserCreationForm):
     # form fields widgets
-    username = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control', 'id':'validationCustom02', 'placeholder': 'Please enter you name here'}))
-    email = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control', 'placeholder': 'name@example.com'}))
-    password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control', 'placeholder': 'Please enter your password here'}))
-    password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control', 'placeholder': 'Please enter you password here'}))
+    username = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'id': 'validationCustom02', 'placeholder': 'Please enter you name here'}
+    ))
+
+    email = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'name@example.com'}
+    ))
+
+    password1 = forms.CharField(widget=forms.PasswordInput(
+        attrs={'class': 'form-control', 'placeholder': 'Please enter your password here'}
+    ))
+
+    password2 = forms.CharField(widget=forms.PasswordInput(
+        attrs={'class': 'form-control', 'placeholder': 'Please enter you password here'}
+    ))
 
     class Meta:
         model = User
@@ -20,4 +31,3 @@ class CustomUserForm(UserCreationForm):
             'password1',
             'password2'
         ]
-
