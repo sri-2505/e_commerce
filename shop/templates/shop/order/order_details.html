@@ -1,0 +1,59 @@
+{% extends "shop/layouts/main.html" %}
+{% load static %}
+
+{% block title %}
+<title>majestic | Landing, Ecommerce &amp; Business Template</title>
+{% endblock title %}
+
+{% block content %}
+{% include "shop/includes/navbar.html" %}
+
+
+<div class="bg-holder overlay overlay-light"
+     style="background-image: url('{% static 'images/gallery/header-bg.png' %}'); background-size: cover;">
+</div>
+
+<section class="py-6">
+    <div class="container">
+
+        <div class="row h-100">
+            <div class="col-lg-7 mb-4">
+                <h5 class="fs-3 fs-lg-5 lh-sm mb-3">Order Details</h5>
+                <hr style="background-color:red; padding:2px; width: 10%"/>
+            </div>
+        </div>
+        <div class="row mb-4 mx-3">
+            <div class="col-md-12">
+                <b>Order number -</b> {{ order.order_number }}
+                <div class="badge bg-primary">{{ order.order_status|capfirst }}</div>
+                <div class='my-2'>Payment status: {{ order.payment_status|capfirst }}</div>
+
+            </div>
+        </div>
+        {% for orderitem in order.orderitem_set.all %}
+        <div class="row h-100 mx-auto">
+            <div class="col-md-4">
+                <img src="{% static orderitem.product.product_image %}" class="img-fluid rounded-start p-2"
+                     alt="...">
+            </div>
+            <div class="col-md-8 p-3">
+                <div class="card-body">
+                    <h5 class="card-title" style="display: inline;">{{ orderitem.product.name }}</h5>
+                    {% if orderitem.product.trending %}
+                    <span class='badge bg-warning'>trending</span>
+                    {% endif %}
+                    <p class="card-text">{{ orderitem.product.description }}</p>
+                    <h6 class='my-2'>Ordered price: Rs. {{ orderitem.amount }}</h6>
+                    <h6 class='my-2'>Order quantity: Rs. {{ orderitem.quantity }}</h6>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!--footer-->
+{% include "shop/includes/footer.html" %}
+
+{% endblock content %}
+

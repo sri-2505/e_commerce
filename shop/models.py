@@ -4,6 +4,7 @@ from django.utils import timezone
 import datetime
 import os
 from utils.constants import *
+import uuid
 
 
 # give file name while uploading
@@ -14,9 +15,12 @@ def getFileName(request, file_name) -> str:
 
 
 # Extending model managers
-class ProductManager(models.Manager):
+class ProductQuerySet(models.QuerySet):
     def active_products(self):
         return self.filter(status=1)
+
+    def exclusive_products(self):
+        return self.filter(is_exclusive=1)
 
 
 # Category model
@@ -62,7 +66,7 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    objects = ProductManager()
+    objects = ProductQuerySet.as_manager()
 
     def __str__(self) -> str:
         return self.name
@@ -73,7 +77,7 @@ class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField(null=False, blank=False)
-    # To add the blow columns to existing table first migrate with only default parameter and them migrate with auto_now 
+    # To add the blow columns to existing table first migrate with only default parameter and them migrate with auto_now
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -81,8 +85,12 @@ class Cart(models.Model):
         unique_together = ('user', 'product')
 
     @property
-    def total_cost(self):
+    def total_final_cost(self):
         return self.quantity * self.product.selling_price
+
+    @property
+    def total_net_cost(self):
+        return self.quantity * self.product.original_price
 
     def __str__(self) -> str:
         return str(self.quantity)
@@ -105,7 +113,7 @@ class Order(models.Model):
     ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    order_number = models.CharField(max_length=100, null=False, blank=False)
+    order_number = models.UUIDField(default=uuid.uuid4, editable=False)
     amount = models.FloatField(default=0.00, null=False, blank=False)
     street_name = models.CharField(max_length=100, null=False, blank=False)
     city = models.CharField(max_length=100, null=False, blank=False)
@@ -136,6 +144,7 @@ class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=0)
+    amount = models.FloatField(default=0.00, null=False, blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

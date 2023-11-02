@@ -11,7 +11,7 @@
                     <h1 class="fw-semi-bold lh-sm fs-4 fs-lg-5 fs-xl-6">Be exclusive</h1>
                     <p class="mb-5 fs-1">The best everyday option in a Super Saver range within a reasonable price. It
                         is our responsibility to keep you 100 percent stylish. Be smart &amp; , trendy with us.</p>
-                    <div class="d-grid gap-2 d-md-block"><a class="btn btn-lg btn-dark" href="#"
+                    <div class="d-grid gap-2 d-md-block"><a class="btn btn-lg btn-dark" href="{% url 'exclusive' %}"
                                                             role="button">Explore</a></div>
                 </div>
             </div>
@@ -20,8 +20,9 @@
                                                                   src="{% static 'images/gallery/outfit.png' %}"
                                                                   alt="..."/>
                     <div class="card-img-overlay bg-dark-gradient">
-                        <div class="d-flex align-items-end justify-content-center h-100"><a
-                                class="btn btn-lg text-light fs-1" href="#!" role="button">Outfit
+                        <div class="d-flex align-items-end justify-content-center h-100">
+                            <a class="btn btn-lg text-light fs-1" href="{% url 'exclusive_with_argument' 'outfit' %}" role="button">
+                                Outfit
                             <svg class="bi bi-arrow-right-short" xmlns="http://www.w3.org/2000/svg" width="23"
                                  height="23" fill="currentColor" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd"

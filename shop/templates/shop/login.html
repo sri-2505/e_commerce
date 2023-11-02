@@ -1,27 +1,26 @@
 {% extends "shop/layouts/main.html" %}
+{% load static %}
 
 {% block title %}
-  Login to shoppify
+<title>majestic | Landing, Ecommerce &amp; Business Template</title>
 {% endblock title %}
 
 {% block content %}
+    {% include "shop/includes/navbar.html" %}
 
-<div class='container' style='margin-top:70px'>
-  {% include "shop/layouts/breadcrumb.html" %}
 
-  <!--Alert messge-->
-  {% include "shop/includes/message.html" %}
-    <div class='row'>
-      <div class='col-12'>
-        <h1>Register</h1>
-        <hr/>
-      </div>
+<div class="bg-holder overlay overlay-light" style="background-image: url('{% static 'images/gallery/header-bg.png' %}'); background-size: cover;">
     </div>
-  </div>
 
-  <div class='container'>
-      <div class='row'>
-        <div class='col-6'>
+<section class="py-6">
+    <div class="container">
+
+        <div class="row h-100">
+            <div class="col-lg-7 mb-4">
+                <h5 class="fs-3 fs-lg-5 lh-sm mb-3">Login to continue</h5>
+                <hr style="background-color:red; padding:2px; width: 10%"/>
+            </div>
+          <div class="col-6 mx-auto">
           <form method='post' action=''>
           <!--Email-->
           <div class="mb-3">
@@ -34,7 +33,7 @@
               </div>
             {% endif %}
           </div>
-          
+
           <!--password-->
           <div class="mb-3">
             <label for="LoginForm" class="form-label">Password</label>
@@ -51,8 +50,11 @@
             <button class="btn btn-primary" type="submit">Login</button>
           </div>
         </form>
+          </div>
         </div>
-      </div>
-    </div>
+    </section>
+
+<!--footer-->
+    {% include "shop/includes/footer.html" %}
     
 {% endblock content %}

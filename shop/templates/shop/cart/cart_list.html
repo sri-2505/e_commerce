@@ -1,60 +1,107 @@
 {% extends "shop/layouts/main.html" %}
+{% load static %}
 
 {% block title %}
-  Cart List
+<title>majestic | Landing, Ecommerce &amp; Business Template</title>
 {% endblock title %}
 
 {% block content %}
+{% include "shop/includes/navbar.html" %}
 
-<div class='container' style='margin-top:70px'>
-  {% include "shop/layouts/breadcrumb.html" %}
+<div class="bg-holder overlay overlay-light"
+     style="background-image: url('{% static 'images/gallery/header-bg.png' %}'); background-size: cover;">
+</div>
 
-  <!--Alert messge-->
-  {% include "shop/includes/message.html" %}
-    <div class='row'>
-      <div class='col-12'>
-        <h1>Cart List</h1>
-        <hr/>
-      </div>
-    </div>
-  </div>
+<section class="py-6">
+    <div class="container">
 
-  <div class='container'>
-      <div class='row'>
-        <div class='col-12'>
-            <table class="table table-hover">
-                <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Image</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">quantity</th>
-                    <th scope="col">Price</th>
-                    <th scope="col" colspan="2">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                {% for cart in carts %}
+        <div class="row h-100">
+            <div class="col-lg-7 mb-3">
+                <h5 class="fs-3 fs-lg-5 lh-sm mb-3">Cart Items</h5>
+                <hr style="background-color:red; padding:2px; width: 10%"/>
+            </div>
+            <div class="col-12">
+                <table class="table table-borderless">
+                    <thead>
                     <tr>
-                        <th scope="row"> {{ forloop.counter }} </th>
-                        <td>{{ cart.product.product_image }}</td>
-                        <td>{{ cart.product.name}}</td>
-                        <td>{{ cart.quantity }}</td>
-                        <td>{{ cart.total_cost }}</td>
-                        <td colspan ="2">
-                            <a class='btn btn-small' href = "{% url 'product' cart.product.name %}"><i class='bi bi-pencil-square'></i></a>
-                            <a class='btn btn-small' href = "{% url 'cart_delete' cart.id %}"><i class='bi bi-x-square'></i></a>
-                        </td>
+                        <th scope="col"></th>
+                        <th scope="col">Product Name</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">amount</th>
+                        <th scope="col">Edit</th>
+                        <th scope="col">Remove</th>
                     </tr>
-                {% endfor %}
-
-                {% if not carts %}
-                    <td colspan="6" class='text-center p-5'>No carts available</td>
-                {% endif %}
-                </tbody>
-              </table>
+                    </thead>
+                    <tbody>
+                    {% for cart in carts %}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <th scope="row">{{ cart.product.name }}</th>
+                        <th scope="row">{{ cart.quantity }}</th>
+                        <th scope="row">{{ cart.total_cost }}</th>
+                        <th scope="row"><a href="{% url 'product' cart.product.name  %}"><i class="bi bi-pencil"> </i>Edit</a>
+                        </th>
+                        <th scope="row"><a href="{% url 'cart_delete' cart.id  %}"><i
+                                class="bi bi-trash"> </i>Delete</a></th>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
-      </div>
+        <div class="row py-4">
+            <div class="col-md-5"></div>
+            <div class="col-md-5">
+                <div class="row my-1">
+                    <div class="col-md-5">
+                        <h5>Total net amount</h5>
+                    </div>
+
+                    <div class="col-md-5">
+                        <h5>Rs. {{ total_net_amount }}</h5>
+                    </div>
+                </div>
+
+                <div class="row my-1">
+                    <div class="col-md-5">
+                        <h5>delivery charge</h5>
+                    </div>
+
+                    <div class="col-md-5">
+                        <h5>Rs. {{ delivery_charges }}</h5>
+                    </div>
+                </div>
+
+                <div class="row border-bottom my-1">
+                    <div class="col-md-5">
+                        <h5>GST</h5>
+                    </div>
+
+                    <div class="col-md-5">
+                        <h5>Rs. {{ gst }}</h5>
+                    </div>
+                </div>
+
+                <div class="row border-bottom my-3">
+                    <div class="col-md-5">
+                        <h5>Final amount</h5>
+                    </div>
+                    <div class="col-md-5">
+                        <h5>Rs. {{ total_final_amount }}</h5>
+                    </div>
+                </div>
+
+                <div class="row border-bottom my-3">
+                    <div class="col-md-6">
+                        <a href="{% url 'checkout' %}" class="btn btn-primary">Check out</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    
+</section>
+
+<!--footer-->
+{% include "shop/includes/footer.html" %}
+
 {% endblock content %}

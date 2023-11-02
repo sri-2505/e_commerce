@@ -6,11 +6,11 @@
 
 # payment types
 ONLINE_PAYMENT = 'online payment'
-CASH_ON_DELIVARY = 'cash on delivary'
+CASH_ON_DELIVERY = 'cash on delivery'
 
 PAYMENT_TYPES = [
         ('online_payment', ONLINE_PAYMENT),
-        ('cash_on_delivary', CASH_ON_DELIVARY),
+        ('cash_on_delivery', CASH_ON_DELIVERY),
     ]
 
 # payment status
@@ -111,3 +111,4 @@ DISTRICTS = {
 HTTP = 'http://'
 HTTPS = 'https://'
 
+ORDERS_LIMIT_PER_PAGE = 5

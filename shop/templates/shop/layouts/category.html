@@ -1,25 +1,6 @@
 {% load static %}
 
 
-{% comment %}
-<ul>
-    {% for category in categories_with_data %}
-    <li>{{ category.name }}</li>
-    <ul>
-        {% for subcategory in category.all_subcategories %}
-        <li>{{ subcategory.name }}</li>
-        <ul>
-            {% for product in subcategory.limited_products %}
-            <li>{{ product.name }}</li>
-            {% endfor %}
-        </ul>
-        {% endfor %}
-    </ul>
-    {% endfor %}
-</ul>
-{% endcomment %}
-
-
 <section id="categoryWomen">
     <div class="container">
         <div class="row h-100">
@@ -31,12 +12,11 @@
                     <!--Category-->
                     <div class="nav nav-tabs majestic-tabs mb-4 justify-content-center" id="nav-tab" role="tablist">
                         {% for category in categories_with_data %}
-                        <button class="nav-link {% if forloop.counter == 1 %} active {% endif %}"
-                                id="nav-{{ category.name }}-tab" data-bs-toggle="tab"
-                                data-bs-target="#nav-{{ category.name }}" type="button" role="tab"
-                                aria-controls="nav-{{ category.name }}" aria-selected="true">{{ category.name|capfirst
-                            }}
-                        </button>
+                            <button class="nav-link {% if forloop.counter == 1 %} active {% endif %}"
+                                    id="nav-{{ category.name }}-tab" data-bs-toggle="tab"
+                                    data-bs-target="#nav-{{ category.name }}" type="button" role="tab"
+                                    aria-controls="nav-{{ category.name }}" aria-selected="true">{{ category.name }}
+                            </button>
                         {% endfor %}
                     </div>
 
@@ -52,8 +32,7 @@
                                     <button class="nav-link {% if forloop.counter == 1 %} active {% endif %}"
                                             id="pills-{{ subcategory.name }}-tab" data-bs-toggle="pill"
                                             data-bs-target="#pills-{{ subcategory.name }}" type="button" role="tab"
-                                            aria-controls="pills-{{ subcategory.name }}" aria-selected="true">{{
-                                        subcategory.name|capfirst }}
+                                            aria-controls="pills-{{ subcategory.name }}" aria-selected="true">{{ subcategory.name|capfirst }}
                                     </button>
                                 </li>
                                 {% endfor %}
@@ -80,14 +59,13 @@
                                                                 src="{% static product.product_image %}" alt="..."/>
                                                             <div class="card-img-overlay ps-0"></div>
                                                             <div class="card-body ps-0 bg-200">
-                                                                <h5 class="fw-bold text-1000 text-truncate">{{
-                                                                    product.name }}</h5>
+                                                                <h5 class="fw-bold text-1000 text-truncate">{{ product.name }}</h5>
                                                                 <div class="fw-bold"><span
                                                                         class="text-600 me-2 text-decoration-line-through">{{ product.original_price }}</span><span
                                                                         class="text-primary">{{ product.original_price }}</span>
                                                                 </div>
                                                             </div>
-                                                            <a class="stretched-link" href="#"></a>
+                                                            <<a class="stretched-link" href="{% url 'product' product.name %}"></a>
                                                         </div>
                                                     </div>
                                                     {% endfor %}
@@ -114,7 +92,7 @@
                                                                         class="text-primary">{{ product.original_price }}</span>
                                                                 </div>
                                                             </div>
-                                                            <a class="stretched-link" href="#"></a>
+                                                            <<a class="stretched-link" href="{% url 'product' product.name %}"></a>
                                                         </div>
                                                     </div>
                                                     {% endfor %}
@@ -141,7 +119,7 @@
                                                                         class="text-primary">{{ product.original_price }}</span>
                                                                 </div>
                                                             </div>
-                                                            <a class="stretched-link" href="#"></a>
+                                                            <<a class="stretched-link" href="{% url 'product' product.name %}"></a>
                                                         </div>
                                                     </div>
                                                     {% endfor %}

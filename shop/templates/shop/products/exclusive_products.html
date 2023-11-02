@@ -11,30 +11,34 @@
 <div class="bg-holder overlay overlay-light" style="background-image: url('{% static 'images/gallery/header-bg.png' %}'); background-size: cover;">
     </div>
 
-    {% for category in categories %}
+    {% for exclusive_subcategory in exclusive_products %}
     <section class="py-6">
     <div class="container">
 
         <div class="row h-100">
             <div class="col-lg-7 mb-6">
-                <h5 class="fs-3 fs-lg-5 lh-sm mb-3">{{ category.name|capfirst }}</h5>
+                <h5 class="fs-3 fs-lg-5 lh-sm mb-3">{{ exclusive_subcategory.name|capfirst }}</h5>
                 <hr style="background-color:red; padding:2px; width: 10%"/>
             </div>
             <div class="col-12">
                 <div class="carousel slide" id="carouselNewArrivals" data-bs-ride="carousel">
                     <div class="carousel-inner">
 
-                        {% if category.subcategories.all|slice:"0:4" %}
+                        {% if exclusive_subcategory.limited_products|slice:"0:4" %}
                         <div class="carousel-item active" data-bs-interval="10000">
                             <div class="row h-100 align-items-center g-2">
-                                {% for subcategory in category.subcategories.all|slice:"0:4" %}
+                                {% for product in exclusive_subcategory.limited_products|slice:"0:4" %}
                                 <div class="col-sm-6 col-md-3 mb-3 mb-md-0 h-100">
                                     <div class="card card-span h-100 text-white"><img class="card-img h-100"
-                                                                                      src="{% static subcategory.image %}"
+                                                                                      src="{% static product.image %}"
                                                                                       alt="..."/>
                                         <div class="card-img-overlay ps-0"></div>
                                         <div class="card-body ps-0 bg-200">
-                                            <h5 class="fw-bold text-1000 text-truncate">{{ subcategory.name }}</h5>
+                                            <h5 class="fw-bold text-1000 text-truncate">{{ product.name }}</h5>
+                                            <div class="fw-bold">
+                                                <span class="text-600 me-2 text-decoration-line-through">{{ product.original_price }}</span>
+                                                <span class="text-primary">{{ product.original_price }}</span>
+                                            </div>
                                         </div>
                                         <a class="stretched-link" href="#"></a>
                                     </div>
@@ -45,57 +49,79 @@
                         {% else %}
                             <div class="carousel-item active">
                             <div class="row h-100 align-items-center g-2 p-3">
-                                Categories will come soon...
+                                Exclusive will come soon...
                             </div>
                         </div>
                         {% endif %}
 
-                        {% if category.subcategories.all|slice:"4:8" %}
-                        <div class="carousel-item" data-bs-interval="5000">
+                        {% if exclusive_products.limited_products.all|slice:"4:8" %}
+                        <div class="carousel-item active" data-bs-interval="10000">
                             <div class="row h-100 align-items-center g-2">
-                                {% for subcategory in category.subcategories.all|slice:"4:8" %}
+                                {% for products in exclusive_products.limited_products.all|slice:"4:8" %}
                                 <div class="col-sm-6 col-md-3 mb-3 mb-md-0 h-100">
                                     <div class="card card-span h-100 text-white"><img class="card-img h-100"
                                                                                       src="{% static subcategory.image %}"
                                                                                       alt="..."/>
-                                        <a class="stretched-link" href="#"></a>
-                                    </div>
-                                </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        {% endif %}
-
-                        {% if category.subcategories.all|slice:"8:12" %}
-                        <div class="carousel-item" data-bs-interval="3000">
-                            <div class="row h-100 align-items-center g-2">
-                                {% for subcategory in category.subcategories.all|slice:"8:12" %}
-                                <div class="col-sm-6 col-md-3 mb-3 mb-md-0 h-100">
-                                    <div class="card card-span h-100 text-white"><img class="card-img h-100"
-                                                                                      src="{% static subcategory.image %}"
-                                                                                      alt="..."/>
-                                        <a class="stretched-link" href="#"></a>
-                                    </div>
-                                </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        {% endif %}
-
-                        {% if category.subcategories.all|slice:"12:16" %}
-                        <div class="carousel-item">
-                            <div class="row h-100 align-items-center g-2">
-                                <div class="col-sm-6 col-md-3 mb-3 mb-md-0 h-100">
-                                    {% for subcategory in category.subcategories.all|slice:"12:16" %}
-                                    <div class="col-sm-6 col-md-3 mb-3 mb-md-0 h-100">
-                                        <div class="card card-span h-100 text-white"><img class="card-img h-100"
-                                                                                          src="{% static subcategory.image %}"
-                                                                                          alt="..."/>
-                                            <a class="stretched-link" href="#"></a>
+                                        <div class="card-img-overlay ps-0"></div>
+                                        <div class="card-body ps-0 bg-200">
+                                            <h5 class="fw-bold text-1000 text-truncate">{{ product.name }}</h5>
+                                            <div class="fw-bold">
+                                                <span class="text-600 me-2 text-decoration-line-through">{{ product.original_price }}</span>
+                                                <span class="text-primary">{{ product.original_price }}</span>
+                                            </div>
                                         </div>
+                                        <a class="stretched-link" href="#"></a>
                                     </div>
-                                    {% endfor %}
                                 </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if exclusive_products.limited_products.all|slice:"8:12" %}
+                        <div class="carousel-item active" data-bs-interval="10000">
+                            <div class="row h-100 align-items-center g-2">
+                                {% for products in exclusive_products.limited_products.all|slice:"8:12" %}
+                                <div class="col-sm-6 col-md-3 mb-3 mb-md-0 h-100">
+                                    <div class="card card-span h-100 text-white"><img class="card-img h-100"
+                                                                                      src="{% static subcategory.image %}"
+                                                                                      alt="..."/>
+                                        <div class="card-img-overlay ps-0"></div>
+                                        <div class="card-body ps-0 bg-200">
+                                            <h5 class="fw-bold text-1000 text-truncate">{{ product.name }}</h5>
+                                            <div class="fw-bold">
+                                                <span class="text-600 me-2 text-decoration-line-through">{{ product.original_price }}</span>
+                                                <span class="text-primary">{{ product.original_price }}</span>
+                                            </div>
+                                        </div>
+                                        <a class="stretched-link" href="#"></a>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if exclusive_products.limited_products.all|slice:"12:16" %}
+                        <div class="carousel-item active" data-bs-interval="10000">
+                            <div class="row h-100 align-items-center g-2">
+                                {% for products in exclusive_products.limited_products.all|slice:"12:16" %}
+                                <div class="col-sm-6 col-md-3 mb-3 mb-md-0 h-100">
+                                    <div class="card card-span h-100 text-white"><img class="card-img h-100"
+                                                                                      src="{% static subcategory.image %}"
+                                                                                      alt="..."/>
+                                        <div class="card-img-overlay ps-0"></div>
+                                        <div class="card-body ps-0 bg-200">
+                                            <h5 class="fw-bold text-1000 text-truncate">{{ product.name }}</h5>
+                                            <div class="fw-bold">
+                                                <span class="text-600 me-2 text-decoration-line-through">{{ product.original_price }}</span>
+                                                <span class="text-primary">{{ product.original_price }}</span>
+                                            </div>
+                                        </div>
+                                        <a class="stretched-link" href="#"></a>
+                                    </div>
+                                </div>
+                                {% endfor %}
                             </div>
                         </div>
                         {% endif %}
@@ -124,3 +150,5 @@
     {% include "shop/includes/footer.html" %}
 
 {% endblock content %}
+
+
