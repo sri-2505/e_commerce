@@ -7,6 +7,7 @@
 
 {% block content %}
 {% include "shop/includes/navbar.html" %}
+{% include "shop/includes/message.html" %}
 
 
 <div class="bg-holder overlay overlay-light"
@@ -131,8 +132,6 @@
 <!--footer-->
     {% include "shop/includes/footer.html" %}
 
-{% comment %} Dependent fields {% endcomment %}
-{% comment %}
 <script>
     $(document).ready(function() {
       $('#state').on('click', function() {
@@ -149,6 +148,6 @@
         });
       });
     });
-</script> {% endcomment %}
+</script>
 
 {% endblock content %}

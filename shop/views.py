@@ -5,9 +5,10 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse, HttpResponse
 from django.utils import timezone
-from django.db.models import F, ExpressionWrapper, FloatField, Prefetch, Count
+from django.db.models import F, ExpressionWrapper, FloatField, Prefetch, Count, Subquery, OuterRef
 from django.core.paginator import Paginator
 from django.core.mail import EmailMultiAlternatives, EmailMessage
+from django.core.exceptions import ValidationError
 from django.template.loader import get_template
 from django.template import Context
 
@@ -51,7 +52,9 @@ def home(request):
 
     new_arrivals = Product.objects.active_products().order_by('created_at').values()[:12]
 
-    categories_with_data = Category.objects.prefetch_related(
+    categories_with_data = Category.objects.annotate(subcategory_count=Count('subcategories')).filter(
+        subcategory_count__gt=0
+    ).prefetch_related(
         Prefetch('subcategories',
                  queryset=SubCategory.objects.prefetch_related(
                      Prefetch(
@@ -60,6 +63,16 @@ def home(request):
                              subcategory=F('subcategory'))[:12],
                          to_attr='limited_products'
                      )
+                 ).annotate(
+                     product_count=Subquery(
+                         Product.objects.filter(
+                             category=OuterRef('category'),
+                         ).filter(
+                             subcategory=OuterRef('pk')
+                         ).annotate(product_count=Count('id')).values('product_count')[:1]
+                     )
+                 ).filter(
+                     product_count__gt=0
                  ),
                  to_attr='all_subcategories'
                  )
@@ -115,28 +128,64 @@ def logout_page(request):
 
 # Categories
 def categories(request, category=None):
-    categories = Category.objects.select_related()
+    categories = Category.objects.annotate(subcategory_count=Count('subcategories')).filter(
+        subcategory_count__gt=0
+    ).prefetch_related(
+        Prefetch('subcategories',
+                 queryset=SubCategory.objects.prefetch_related(
+                     Prefetch(
+                         'products',
+                         queryset=Product.objects.filter(category=F('subcategory__category')).filter(
+                             subcategory=F('subcategory'))[:12],
+                         to_attr='limited_products'
+                     )
+                 ).annotate(
+                     product_count=Subquery(
+                         Product.objects.filter(
+                             category=OuterRef('category'),
+                         ).filter(
+                             subcategory=OuterRef('pk')
+                         ).annotate(product_count=Count('id')).values('product_count')[:1]
+                     )
+                 ).filter(
+                     product_count__gt=0
+                 ),
+                 to_attr='all_subcategories'
+                 )
+    )
+
     if category is not None:
         categories = categories.filter(name=category)
+
+    if not categories.exists():
+        messages.info(request, 'No subcategory found in this category')
+        return redirect(request.META.get('HTTP_REFERER'), '/')
 
     return render(request, 'shop/categories.html', {'categories': categories})
 
 
 # Category products
-def categoryProducts(request, name):
+def subcategory_products(request, category_id, subcategory_id=None):
     try:
-        Category.objects.filter(name=name).get()
-        products = Product.objects.filter(category__name=name, status=1)
-        return render(request, 'shop/products/products.html', {'products': products, 'category': name})
+        products = Product.objects.active_products().filter(category_id=category_id, subcategory_id=subcategory_id)
+        paginator = Paginator(products, PRODUCTS_LIMIT_PER_PAGE)
+        no_of_pages = paginator.num_pages
+        page_numbers = range(1, no_of_pages + 1)
+        page_number = request.GET.get('page_number', 1)
+        products = paginator.get_page(page_number)
+        return render(request, 'shop/products/subcategory_products.html',
+                      {'products': products, 'page_numbers': page_numbers})
     except Category.DoesNotExist:
         messages.warning(request, 'No such category')
         return redirect('categories')
 
 
 # product details
-def productDetails(request, name):
+def productDetails(request, id):
     try:
-        product = Product.objects.filter(name=name, status=1).get()
+        product = Product.objects.get(pk=id)
+        products_per_row = 4
+
         return render(request, 'shop/products/product.html', {'product': product, 'category': product.category})
     except Product.DoesNotExist:
         messages.warning(request, 'No such product')
@@ -282,6 +331,14 @@ def create_order(request):
                     'order': order
                 }
                 return render(request, 'shop/order/order_details.html', context)
+        else:
+            try:
+                form.full_clean()
+                return redirect('create_order') # This will trigger validation without raising exceptions
+            except ValidationError:
+                # Handle the validation error here and display a user-friendly message.
+                error_message = "Invalid PIN code. Please enter a 6-digit PIN."
+                return HttpResponse(error_message)
     else:
         form = OrderForm()
         product_id = request.GET.get('product_id')
@@ -293,7 +350,7 @@ def create_order(request):
 
         context = {
             'form': form,
-            'districts': DISTRICTS,
+            'districts': TAMIL_NADU_DISTRICTS,
             'product': product,
         }
 
@@ -363,7 +420,8 @@ def order_details(request, order_id):
 
 @login_required()
 def order_list(request):
-    orders = Order.objects.filter(user=request.user).prefetch_related('orderitem_set__product').order_by('-ordered_date')
+    orders = Order.objects.filter(user=request.user).prefetch_related('orderitem_set__product').order_by(
+        '-ordered_date')
 
     paginator = Paginator(orders, ORDERS_LIMIT_PER_PAGE)
     no_of_pages = paginator.num_pages
@@ -468,3 +526,42 @@ def checkout(request):
             'gst': gst
         }
         return render(request, 'shop/cart/checkout.html', context)
+
+
+def subcategories(request, subcategory=None):
+    is_exclusive = request.GET.get('exclusive')
+    is_best_deals = request.GET.get('best_deals')
+
+    products_query = Product.objects.filter(
+        subcategory=F('subcategory')
+    )
+
+    if is_exclusive:
+        products_query = products_query.filter(is_exclusive=1).order_by('created_at')
+
+    if is_best_deals:
+        products_query = products_query.annotate(price_difference=ExpressionWrapper(
+            ((F('original_price') - F('selling_price')) * F('original_price')) * 100,
+            output_field=FloatField()
+        )).order_by('price_difference')
+
+    subcategories = SubCategory.objects.prefetch_related(
+        Prefetch(
+            'products',
+            queryset=products_query[:12],
+            to_attr='limited_products'
+        )
+    ).annotate(
+        product_count=Count('products')
+    ).filter(
+        product_count__gt=0
+    )
+
+    if subcategory is not None:
+        if not SubCategory.objects.filter(name=subcategory).exists():
+            messages.warning(request, "No such subcategory")
+            return redirect('home')
+        else:
+            subcategories = subcategories.filter(name=subcategory)
+
+    return render(request, 'shop/products/subcategories.html', {'subcategories': subcategories})

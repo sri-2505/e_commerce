@@ -1,7 +1,6 @@
 from django.contrib import admin
 from django.urls import path
 from . import views
-
 urlpatterns = [
     path('', views.home, name='home'),
     path('register', views.register, name='register'),
@@ -9,19 +8,19 @@ urlpatterns = [
     path('logout', views.logout_page, name='logout'),
 
     # category
-    path('categories/<str:category>', views.categories, name='categories_with_argument'),
+    path('category/<str:category>', views.categories, name='category_with_argument'),
     path('categories', views.categories, name='categories'),
 
-    # subcategory
-    path('<str:category>/subcategory/<str:subcategory_name>', views.categoryProducts, name='subcategory_with_argument'),
-    path('<str:category>/subcategory', views.categoryProducts, name='category'),
+    # subcategory - products
+    path('category/<int:category_id>/subcategory/<int:subcategory_id>', views.subcategory_products, name='subcategory_products'),
+
+    # subcategory products - all, exclusive, best deals
+    path('subcategories', views.subcategories, name='subcategories'),
+    path('subcategories/<str:subcategory>', views.subcategories, name='exclusive_with_argument'),
 
     # product details
-    path('product/<str:name>', views.productDetails, name='product'),
+    path('product/<int:id>', views.productDetails, name='product'),
 
-    # exclusive products
-    path('exclusive', views.exclusive, name='exclusive'),
-    path('exclusive/<str:subcategory>', views.exclusive, name='exclusive_with_argument'),
 
     # add to cart - ajax request
     path('add_cart', views.add_to_cart, name='cart_add'),
@@ -35,3 +34,4 @@ urlpatterns = [
     path('order_details/<int:order_id>', views.order_details, name='order_details'),
     path('order_list', views.order_list, name='order_list'),
 ]
+
