@@ -62,6 +62,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'rollbar.contrib.django.middleware.RollbarNotifierMiddleware',
 ]
 
 ROOT_URLCONF = 'e_commerce.urls'
@@ -182,13 +183,20 @@ LOGGING = {
             'formatter': 'standard',
             'level': 'WARNING'
         },
+        'rollbar': {
+            'class': 'rollbar.logger.RollbarHandler',
+            'formatter': 'standard',
+            'level': 'WARNING',
+            'environment': 'development' if DEBUG else 'production',
+            'access_token': os.getenv('ROLLBAR_ACCESS_TOKEN')
+        },
     },
 
     # will send the logs to the handlers, filter the log levels
     'loggers': {
         'django': {
             'level': os.getenv('LOG_LEVEL'),
-            'handlers': ['info_log', 'error_log'],
+            'handlers': ['info_log', 'error_log', 'rollbar'],
         },
         'django.db.backends': {
             'level': 'DEBUG',  # warning and higher level logs
@@ -216,3 +224,11 @@ EMAIL_HOST = os.getenv('EMAIL_HOST')
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = os.getenv('EMAIL_PORT')
+
+# Rollbar
+ROLLBAR = {
+    'access_token': os.getenv('ROLLBAR_ACCESS_TOKEN'),
+    'environment': 'development' if DEBUG else 'production',
+    'code_version': '1.0',
+    'root': BASE_DIR,
+}
