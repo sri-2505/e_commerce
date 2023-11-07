@@ -14,11 +14,11 @@ from pathlib import Path
 import os
 
 from dotenv import load_dotenv
+
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -30,7 +30,6 @@ DEBUG = bool(os.getenv('DEBUG'))
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1').split(',')
-
 
 # Application definition
 
@@ -85,7 +84,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'e_commerce.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
@@ -98,7 +96,6 @@ DATABASES = {
         'PASSWORD': os.getenv('PASSWORD')
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -118,7 +115,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -132,20 +128,19 @@ USE_TZ = True
 
 LOGIN_URL = '/login'
 
-LOGIN_REDIRECT_URL = '' # home page URL
+LOGIN_REDIRECT_URL = ''  # home page URL
 
-LOGOUT_REDIRECT_URL = '' # home page URL
-
+LOGOUT_REDIRECT_URL = ''  # home page URL
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
 MEDIA_URL = 'images/'
-MEDIA_ROOT = BASE_DIR/'static'
+MEDIA_ROOT = BASE_DIR / 'static'
 
 STATICFILES_DIRS = [
-    BASE_DIR/'static'
+    BASE_DIR / 'static'
 ]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
@@ -154,6 +149,54 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+
+    # formatting the logs
+    'formatters': {
+        'standard': {  # fomatter name
+            'format': "{asctime} {levelname} {module} {message}",
+            'style': '{'  # this should be used in the above string
+        },
+    },
+
+    # Log the logs in defined files
+    'handlers': {
+        'query_log': {
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'shop/logs/query.log',
+            'formatter': 'standard',
+            'level': 'DEBUG'
+        },
+        'info_log': {
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'shop/logs/info.log',
+            'formatter': 'standard',
+            'level': 'INFO'
+        },
+        'error_log': {
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'shop/logs/error.log',
+            'formatter': 'standard',
+            'level': 'WARNING'
+        },
+    },
+
+    # will send the logs to the handlers, filter the log levels
+    'loggers': {
+        'django': {
+            'level': os.getenv('LOG_LEVEL'),
+            'handlers': ['info_log', 'error_log'],
+        },
+        'django.db.backends': {
+            'level': 'DEBUG',  # warning and higher level logs
+            'handlers': ['query_log'],
+            'propagate': True
+        }
+    }
+}
 
 # s3 bitbucket configuration
 if not bool(os.getenv('DEBUG')):

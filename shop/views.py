@@ -10,7 +10,7 @@ from django.core.paginator import Paginator
 from django.core.mail import EmailMultiAlternatives, EmailMessage
 from django.core.exceptions import ValidationError
 from django.template.loader import get_template
-from django.template import Context
+import logging
 
 # forms
 from shop.forms.userRegisterationForm import CustomUserForm
@@ -40,11 +40,17 @@ from utils.helper import (
     verify_signature
 )
 
+logger = logging.getLogger('django')
 load_dotenv()
 
 
 # home page
 def home(request):
+    logger.info('info log')
+    logger.warning('warning log')
+    logger.critical('critical log')
+    logger.error('error log')
+
     best_deals = Product.objects.active_products().annotate(price_difference=ExpressionWrapper(
         ((F('original_price') - F('selling_price')) * F('original_price')) * 100,
         output_field=FloatField()
