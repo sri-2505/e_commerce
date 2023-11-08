@@ -133,6 +133,8 @@ LOGIN_REDIRECT_URL = ''  # home page URL
 
 LOGOUT_REDIRECT_URL = ''  # home page URL
 
+AUTH_USER_MODEL = 'shop.User'
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
@@ -196,13 +198,13 @@ LOGGING = {
     'loggers': {
         'django': {
             'level': os.getenv('LOG_LEVEL'),
-            'handlers': ['info_log', 'error_log', 'rollbar'],
+            'handlers': ['info_log', 'error_log'],
         },
-        'django.db.backends': {
-            'level': 'DEBUG',  # warning and higher level logs
-            'handlers': ['query_log'],
-            'propagate': True
-        }
+        # 'django.db.backends': {
+        #     'level': 'DEBUG',  # warning and higher level logs
+        #     'handlers': ['query_log'],
+        #     'propagate': True
+        # }
     }
 }
 
