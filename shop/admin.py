@@ -2,6 +2,8 @@ from django.contrib import admin
 from .models import Category
 from .models import SubCategory
 from .models import Product
+from shop.models import User
+
 
 # imports for custom user management
 from django import forms
@@ -10,7 +12,6 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
 
-from .models import User
 
 # custom user model registered in admin
 class UserCreationForm(forms.ModelForm):
@@ -78,7 +79,7 @@ class UserAdmin(BaseUserAdmin):
             None,
             {
                 "classes": ["wide"],
-                "fields": ["email", "date_joined", "password1", "password2"],
+                "fields": ["email", "username", "date_joined", "password1", "password2"],
             },
         ),
     ]
@@ -91,17 +92,18 @@ class UserAdmin(BaseUserAdmin):
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'image', 'description')
 
+
 class SubCategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'image', 'description')
+
 
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('name', 'product_image', 'category_id')
 
+
+admin.site.register(User, UserAdmin)
+
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(SubCategory, SubCategoryAdmin)
 admin.site.register(Product, ProductAdmin)
-# Now register the new UserAdmin...
-admin.site.register(User, UserAdmin)
-# ... and, since we're not using Django's built-in permissions,
-# unregister the Group model from admin.
-# admin.site.unregister(Group)
+admin.site.unregister(Group)
