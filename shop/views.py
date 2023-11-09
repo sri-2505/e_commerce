@@ -9,7 +9,6 @@ from django.http import JsonResponse, HttpResponse
 from django.utils import timezone
 from django.db.models import F, ExpressionWrapper, FloatField, Prefetch, Count, Subquery, OuterRef
 from django.core.paginator import Paginator
-from django.core.mail import EmailMultiAlternatives, EmailMessage
 from django.core.exceptions import ValidationError
 from django.template.loader import get_template
 import logging
@@ -28,7 +27,7 @@ from .models import (
     Order,
     OrderItem
 )
-
+from shop.celery.tasks import send_order_details_mail
 # core python
 import json
 import os
@@ -320,15 +319,7 @@ def create_order(request):
 
                 body = get_template('shop/mail/order_placed.html').render(mail_context)
 
-                email = EmailMessage(
-                    'Majestic - Ecommerce site',
-                    body,
-                    os.getenv('SITE_EMAIL_ADDRESS'),
-                    [request.user.email]
-                )
-
-                email.content_subtype = 'html'
-                email.send(fail_silently=False)
+                send_order_details_mail.delay(request.user.email, body)
 
                 context = {
                     'order': order
@@ -337,7 +328,7 @@ def create_order(request):
         else:
             try:
                 form.full_clean()
-                return redirect('create_order') # This will trigger validation without raising exceptions
+                return redirect('create_order')  # This will trigger validation without raising exceptions
             except ValidationError:
                 # Handle the validation error here and display a user-friendly message.
                 error_message = "Invalid PIN code. Please enter a 6-digit PIN."
@@ -373,6 +364,7 @@ def callback(request):
         if not verify_signature(request.POST):
             order.status = COMPLETED
             order.save()
+            Cart.objects.filter(user=order.user).update(created_at__gt=timezone.now(), is_purchased=True)
             return render(request, "shop/order/callback.html", context={"status": order.status})
         else:
             order.status = ERROR
@@ -495,15 +487,7 @@ def checkout(request):
 
                 body = get_template('shop/mail/order_placed.html').render(mail_context)
 
-                email = EmailMessage(
-                    'Majestic - Ecommerce site',
-                    body,
-                    os.getenv('SITE_EMAIL_ADDRESS'),
-                    [request.user.email]
-                )
-
-                email.content_subtype = 'html'
-                email.send(fail_silently=False)
+                send_order_details_mail.delay(request.user.email, body)
 
                 context = {
                     'order': order
