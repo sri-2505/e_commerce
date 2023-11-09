@@ -3,7 +3,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title>Order placed successfully!</title>
+    <title>Cart abundant mail</title>
     <style>
         /* -------------------------------------
             GLOBAL RESETS
@@ -350,48 +350,14 @@
                     <!-- START MAIN CONTENT AREA -->
                     <tr>
                         <td class="wrapper">
-                            <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-                                <tr>
-                                    <td>
-                                        <p>Hi {{ request.user.name }},</p>
-                                        <p>Your has been placed successfully. Track your order status <a
-                                                href="#">Here</a></p>
-                                        <div>
-                                            <h1>Your order details</h1>
-                                            <p>Order ID - {{ order.order_number }}</p>
-                                            <table role="presentation" border="0" cellpadding="0" cellspacing="0"
-                                                   class="order_details">
-                                                <tr>
-                                                    <th>Product name</th>
-                                                    <th>Quantity</th>
-                                                    <th>Amount</th>
-                                                </tr>
-                                                {% if order_item is not None %}
-                                                <tr>
-                                                    <td>{{ order_item.product.name }}</td>
-                                                    <td>{{ order_item.quantity }}</td>
-                                                    <td>{{ order_item.amount }}</td>
-                                                </tr>
-                                                {% endif %}
+                            <p>
+                                Hello,<br/><br/>
 
-                                                {% if order_items is not None %}
-                                                {% for order_item in order_items %}
-                                                <tr>
-                                                    <td>{{ order_item.product.name }}</td>
-                                                    <td>{{ order_item.quantity }}</td>
-                                                    <td>{{ order_item.amount }}</td>
-                                                </tr>
-                                                {% endfor %}
-                                                {% endif %}
-                                            </table>
-                                        </div>
-                                        <br/>
-                                        <p>Total amount - {{ order.amount }}</p>
-                                        <br/>
-                                        <p>Thank you for shopping with us.</p>
-                                    </td>
-                                </tr>
-                            </table>
+                                We've noticed that you have items in your cart that are still pending. Please take a
+                                moment to review your cart and complete your purchase.<br/><br/>
+
+                                Thank you for shopping with us!<br/><br/>
+                            </p>
                         </td>
                     </tr>
 

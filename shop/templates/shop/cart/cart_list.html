@@ -40,7 +40,7 @@
                         <th scope="row">{{ cart.product.name }}</th>
                         <th scope="row">{{ cart.quantity }}</th>
                         <th scope="row">{{ cart.total_cost }}</th>
-                        <th scope="row"><a href="{% url 'product' cart.product.name  %}"><i class="bi bi-pencil"> </i>Edit</a>
+                        <th scope="row"><a href="{% url 'product' cart.product.id  %}"><i class="bi bi-pencil"> </i>Edit</a>
                         </th>
                         <th scope="row"><a href="{% url 'cart_delete' cart.id  %}"><i
                                 class="bi bi-trash"> </i>Delete</a></th>

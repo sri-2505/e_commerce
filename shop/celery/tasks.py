@@ -5,8 +5,9 @@ from django.utils import timezone
 from datetime import timedelta
 import logging
 from dotenv import load_dotenv
-
+from django.template.loader import get_template
 from shop.models import Cart
+
 
 logger = logging.getLogger('django')
 load_dotenv()
@@ -31,15 +32,19 @@ def send_order_details_mail(user_email, body):
 @shared_task()
 def send_cart_abundance_mail():
     try:
-        abundant_cart_users = Cart.objects.filter(
-            created_at__gt=timezone.now() - timedelta(days=5),
-            is_purchased=True
-        ).values('user').distinct()
+        cart_abundance_mail_template = get_template('shop/mail/cart_abundance_mail.html').render()
 
-        if abundant_cart_users:
+        user_emails = Cart.objects.filter(
+            # created_at__gt=timezone.now() - timedelta(days=5),
+            # is_purchased=False
+        ).values_list('user__email', flat=True).distinct()
+
+        if user_emails:
             email = EmailMessage(
                 'Majestic - Ecommerce site',
+                cart_abundance_mail_template,
                 os.getenv('SITE_EMAIL_ADDRESS'),
+                user_emails
             )
 
             email.content_subtype = 'html'
