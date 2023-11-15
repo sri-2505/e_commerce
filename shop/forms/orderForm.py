@@ -60,8 +60,3 @@ class OrderForm(forms.ModelForm):
             'pincode',
             'payment_type'
         ]
-"""
-    Form validation
-"""
-
-
