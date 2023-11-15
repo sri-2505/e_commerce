@@ -363,7 +363,8 @@ def order_details(request, order_id):
 
 @login_required()
 def order_list(request):
-    orders = Order.objects.filter(user=request.user).prefetch_related('orderitem_set__product').order_by('-ordered_date')
+    orders = Order.objects.filter(user=request.user).prefetch_related('orderitem_set__product').order_by(
+        '-ordered_date')
 
     paginator = Paginator(orders, ORDERS_LIMIT_PER_PAGE)
     no_of_pages = paginator.num_pages
@@ -468,3 +469,12 @@ def checkout(request):
             'gst': gst
         }
         return render(request, 'shop/cart/checkout.html', context)
+
+
+# favorites - similar to cart
+def favorite(request):
+    return render(request, 'shop/status_pages/coming_soon.html')
+
+
+def user_profile(request):
+    return render(request, 'shop/status_pages/coming_soon.html')

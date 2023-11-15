@@ -34,4 +34,8 @@ urlpatterns = [
     path('callback', views.callback, name='callback'),
     path('order_details/<int:order_id>', views.order_details, name='order_details'),
     path('order_list', views.order_list, name='order_list'),
+
+    # upcoming
+    path('user_profile', views.user_profile, name='user_profile'),
+    path('favorite', views.favorite, name='favorite'),
 ]
