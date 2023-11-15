@@ -39,7 +39,6 @@ class OrderForm(forms.ModelForm):
     )
 
     pincode = forms.CharField(
-        validators=[RegexValidator(r'\d{6}$', 'Invalid pincode', 'Invalid_pincode')],
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': 'Please enter you name here'

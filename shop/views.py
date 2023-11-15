@@ -9,7 +9,6 @@ from django.http import JsonResponse, HttpResponse
 from django.utils import timezone
 from django.db.models import F, ExpressionWrapper, FloatField, Prefetch, Count, Subquery, OuterRef
 from django.core.paginator import Paginator
-from django.core.mail import EmailMessage
 from django.core.exceptions import ValidationError
 from django.template.loader import get_template
 import logging
@@ -28,7 +27,7 @@ from .models import (
     Order,
     OrderItem
 )
-
+from shop.celery.tasks import send_order_details_mail
 # core python
 import json
 import os
@@ -236,7 +235,7 @@ def cart_list(request):
     if request.user.is_authenticated:
         user = request.user
         # cart_set is a reverse relationship
-        carts = Cart.objects.filter(user=user).select_related('product')
+        carts = Cart.objects.filter(user=user, is_purchased=False).select_related('product')
         total_final_amount = sum(cart.total_final_cost for cart in carts)
         total_net_amount = sum(cart.total_net_cost for cart in carts)
         delivery_charges = 0
@@ -320,28 +319,12 @@ def create_order(request):
 
                 body = get_template('shop/mail/order_placed.html').render(mail_context)
 
-                email = EmailMessage(
-                    'Majestic - Ecommerce site',
-                    body,
-                    os.getenv('SITE_EMAIL_ADDRESS'),
-                    [request.user.email]
-                )
-
-                email.content_subtype = 'html'
-                email.send(fail_silently=False)
+                send_order_details_mail.delay(request.user.email, body)
 
                 context = {
                     'order': order
                 }
                 return render(request, 'shop/order/order_details.html', context)
-        else:
-            try:
-                form.full_clean()
-                return redirect('create_order') # This will trigger validation without raising exceptions
-            except ValidationError:
-                # Handle the validation error here and display a user-friendly message.
-                error_message = "Invalid PIN code. Please enter a 6-digit PIN."
-                return HttpResponse(error_message)
     else:
         form = OrderForm()
         product_id = request.GET.get('product_id')
@@ -373,6 +356,7 @@ def callback(request):
         if not verify_signature(request.POST):
             order.status = COMPLETED
             order.save()
+            Cart.objects.filter(user=order.user).update(created_at__gt=timezone.now(), is_purchased=True)
             return render(request, "shop/order/callback.html", context={"status": order.status})
         else:
             order.status = ERROR
@@ -494,15 +478,9 @@ def checkout(request):
 
                 body = get_template('shop/mail/order_placed.html').render(mail_context)
 
-                email = EmailMessage(
-                    'Majestic - Ecommerce site',
-                    body,
-                    os.getenv('SITE_EMAIL_ADDRESS'),
-                    [request.user.email]
-                )
+                send_order_details_mail.delay(request.user.email, body)
 
-                email.content_subtype = 'html'
-                email.send(fail_silently=False)
+                Cart.objects.filter(user=request.user).update(created_at__gt=timezone.now(), is_purchased=True)
 
                 context = {
                     'order': order
