@@ -1,0 +1,88 @@
+{% extends "shop/layouts/main.html" %}
+{% load static %}
+
+{% block title %}
+<title>Your orders | Majestic</title>
+{% endblock title %}
+
+{% block content %}
+{% include "shop/includes/navbar.html" %}
+
+
+<div class="bg-holder overlay overlay-light"
+     style="background-image: url('{% static 'images/gallery/header-bg.png' %}'); background-size: cover;">
+</div>
+
+<section class="py-6">
+    <div class="container">
+        <div class="row h-100">
+            <div class="col-lg-7 mb-4">
+                <h5 class="fs-3 fs-lg-5 lh-sm mb-3">Your orders</h5>
+                <hr style="background-color:red; padding:2px; width: 10%"/>
+            </div>
+        </div>
+        <div class="row h-100 mx-auto">
+            {% for order in orders %}
+            <div class="col-md-6 p-3">
+                <div class="card-body">
+                    <h5 class="card-title" style="display: inline;"><a href="{% url 'order_details' order.id %}">{{ order.order_number }}</a></h5>
+                    <hr style="background-color:red; padding:1px; width: 10%"/>
+                    <p class="card-text">Payment status: {{ order.payment_status }}</p>
+                    <p class="card-text">Order status: {{ order.order_status }}</p>
+                    <p class="card-text">Ordered date: {{ order.ordered_date }}</p>
+                    <p class="card-text">Address:</p>
+                    <div>
+                        {{ order.street_name }} <br/>
+                        {{ order.city }} <br/>
+                        {{ order.district }} <br/>
+                        {{ order.state }} <br/>
+                        {{ order.pincode }} <br/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 p-3">
+                <div class="card-body">
+                    <h5 class="card-title" style="display: inline;">Ordered products</h5>
+                    <hr style="background-color:red; padding:1px; width: 10%"/>
+                    <ul>
+                        {% for order_item in order.orderitem_set.all %}
+                            <li>{{ order_item.product.name }} - {{ order_item.product.quantity }} qty</li>
+                        {% endfor %}
+                    </ul>
+                    <div>
+                        Total amount :Rs. {{ order.amount }}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!--Paginator-->
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li class="page-item {% if not orders.has_previous %} disabled {% endif %}">
+                    <a class="page-link" href="{% if orders.has_previous %} ?page_number={{ orders.previous_page_number }} {% else %} # {% endif %}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+
+                {% for page_number in page_numbers %}
+                    <li class="page-item {% if page_number == orders.number %} active {% endif %}"><a class="page-link" href="?page_number={{ page_number }}">{{ page_number }}</a></li>
+                {% endfor %}
+
+                <li class="page-item {% if not orders.has_next %} disabled {% endif %}">
+                    <a class="page-link" href="{% if orders.has_next %} ?page_number={{ orders.next_page_number }} {% else %} # {% endif %}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+
+            </ul>
+        </nav>
+    </div>
+</section>
+
+<!--footer-->
+{% include "shop/includes/footer.html" %}
+
+{% endblock content %}
+

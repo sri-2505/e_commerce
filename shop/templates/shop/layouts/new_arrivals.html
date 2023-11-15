@@ -21,7 +21,7 @@
                                             <h6 class="text-primary">{{ new_arrival.selling_price }}</h6>
                                             <p class="text-400 fs-1">{{ new_arrival.name }}</p>
                                         </div>
-                                        <a class="stretched-link" href="#"></a>
+                                        <a class="stretched-link" href="{% url 'product' new_arrival.name %}"></a>
                                     </div>
                                 </div>
                                 {% endfor %}
@@ -39,7 +39,7 @@
                                             <h6 class="text-primary">{{ new_arrival.selling_price }}</h6>
                                             <p class="text-400 fs-1">{{ new_arrival.name }}</p>
                                         </div>
-                                        <a class="stretched-link" href="#"></a>
+                                        <a class="stretched-link" href="{% url 'product' new_arrival.name %}"></a>
                                     </div>
                                 </div>
                                 {% endfor %}
@@ -57,7 +57,7 @@
                                             <h6 class="text-primary">{{ new_arrival.selling_price }}</h6>
                                             <p class="text-400 fs-1">{{ new_arrival.name }}</p>
                                         </div>
-                                        <a class="stretched-link" href="#"></a>
+                                        <a class="stretched-link" href="{% url 'product' new_arrival.name %}"></a>
                                     </div>
                                 </div>
                                 {% endfor %}
@@ -97,4 +97,6 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 </section>

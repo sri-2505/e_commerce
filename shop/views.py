@@ -6,6 +6,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse, HttpResponse
 from django.utils import timezone
 from django.db.models import F, ExpressionWrapper, FloatField, Prefetch, Count
+from django.core.paginator import Paginator
+from django.core.mail import EmailMultiAlternatives, EmailMessage
+from django.template.loader import get_template
+from django.template import Context
 
 # forms
 from shop.forms.userRegisterationForm import CustomUserForm
@@ -20,7 +24,7 @@ from .models import (
     Cart,
     Order,
     OrderItem
-    )
+)
 
 # core python
 import json
@@ -40,26 +44,29 @@ load_dotenv()
 
 # home page
 def home(request):
-    best_deals = Product.objects.active_products().annotate(price_difference = ExpressionWrapper(
+    best_deals = Product.objects.active_products().annotate(price_difference=ExpressionWrapper(
         ((F('original_price') - F('selling_price')) * F('original_price')) * 100,
-        output_field = FloatField()
+        output_field=FloatField()
     )).order_by('price_difference').values()[:12]
 
     new_arrivals = Product.objects.active_products().order_by('created_at').values()[:12]
 
-    categories_with_data =  Category.objects.prefetch_related(
+    categories_with_data = Category.objects.prefetch_related(
         Prefetch('subcategories',
-                queryset = SubCategory.objects.prefetch_related(
-                    Prefetch(
-                        'products',
-                        queryset = Product.objects.all()[:12],
-                        to_attr = 'limited_products'
-                       )
-                    ),
-                to_attr = 'all_subcategories'
-                )
-            )
-    return render(request, 'shop/index.html', {'best_deals': best_deals, 'new_arrivals': new_arrivals, 'categories_with_data': categories_with_data})
+                 queryset=SubCategory.objects.prefetch_related(
+                     Prefetch(
+                         'products',
+                         queryset=Product.objects.filter(category=F('subcategory__category')).filter(
+                             subcategory=F('subcategory'))[:12],
+                         to_attr='limited_products'
+                     )
+                 ),
+                 to_attr='all_subcategories'
+                 )
+    )
+
+    return render(request, 'shop/index.html', {'best_deals': best_deals, 'new_arrivals': new_arrivals,
+                                               'categories_with_data': categories_with_data})
 
 
 # registeration
@@ -98,7 +105,7 @@ def login_page(request):
 
 
 # logout
-@login_required(login_url='/login')
+@login_required()
 def logout_page(request):
     if request.user.is_authenticated:
         logout(request)
@@ -107,8 +114,11 @@ def logout_page(request):
 
 
 # Categories
-def categories(request):
-    categories = Category.objects.all()
+def categories(request, category=None):
+    categories = Category.objects.select_related()
+    if category is not None:
+        categories = categories.filter(name=category)
+
     return render(request, 'shop/categories.html', {'categories': categories})
 
 
@@ -134,7 +144,7 @@ def productDetails(request, name):
 
 
 # add to cart
-@login_required(login_url='/login')
+@login_required()
 def add_to_cart(request):
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         if request.user.is_authenticated:
@@ -169,13 +179,26 @@ def add_to_cart(request):
 
 
 # cart list
-@login_required(login_url='/login')
+@login_required()
 def cart_list(request):
     if request.user.is_authenticated:
         user = request.user
         # cart_set is a reverse relationship
         carts = Cart.objects.filter(user=user).select_related('product')
-        return render(request, 'shop/cart/cart_list.html', {'carts': carts})
+        total_final_amount = sum(cart.total_final_cost for cart in carts)
+        total_net_amount = sum(cart.total_net_cost for cart in carts)
+        delivery_charges = 0
+        gst = 0
+
+        context = {
+            'carts': carts,
+            'total_net_amount': total_net_amount,
+            'delivery_charges': delivery_charges,
+            'gst': gst,
+            # will move to the cart property one gst and delivery logic completed
+            'total_final_amount': total_final_amount - delivery_charges - gst,
+        }
+        return render(request, 'shop/cart/cart_list.html', context=context)
     else:
         messages.warning(request, 'Login to see your cart list.')
         return redirect('/login')
@@ -194,7 +217,7 @@ def cart_delete(request, cart_id):
 
 
 # create order
-@login_required(login_url='/login')
+@login_required()
 def create_order(request):
     if request.method == 'POST':
         form = OrderForm(request.POST)
@@ -210,8 +233,6 @@ def create_order(request):
             form_values['payment_status'] = PENDING
             form_values['order_status'] = PENDING
             form_values['amount'] = order_amount
-            # create a unique order number
-            form_values['order_number'] = '222'
 
             # razor pay login
             razor_pay_client = razorpay_login()
@@ -222,6 +243,12 @@ def create_order(request):
             })
             form_values['provider_order_id'] = razor_pay_order['id']
             order = Order.objects.create(**form_values)
+            order_item = OrderItem.objects.create(
+                order=order,
+                product_id=product_id,
+                amount=order_amount,
+                quantity=order_quantity
+            )
 
             context = {
                 'callback_url': HTTP + os.getenv('DEV_URL') + '/callback',
@@ -230,8 +257,31 @@ def create_order(request):
                 'currency': INR,
                 'amount': order_amount
             }
+            if form_values['payment_type'] == ONLINE_PAYMENT.replace(' ', '_'):
+                return render(request, 'shop/order/payment.html', context)
+            else:
+                mail_context = {
+                    'user_name': request.user.username,
+                    'order': order,
+                    'order_item': order_item
+                }
 
-            return render(request, 'shop/order/payment.html', context)
+                body = get_template('shop/mail/order_placed.html').render(mail_context)
+
+                email = EmailMessage(
+                    'Majestic - Ecommerce site',
+                    body,
+                    os.getenv('SITE_EMAIL_ADDRESS'),
+                    [request.user.email]
+                )
+
+                email.content_subtype = 'html'
+                email.send(fail_silently=False)
+
+                context = {
+                    'order': order
+                }
+                return render(request, 'shop/order/order_details.html', context)
     else:
         form = OrderForm()
         product_id = request.GET.get('product_id')
@@ -245,7 +295,6 @@ def create_order(request):
             'form': form,
             'districts': DISTRICTS,
             'product': product,
-
         }
 
         return render(request, 'shop/order/create_order.html', context)
@@ -274,8 +323,157 @@ def callback(request):
         provider_order_id = json.loads(request.POST.get("error[metadata]")).get(
             "order_id"
         )
+
         order = Order.objects.get(provider_order_id=provider_order_id)
         order.payment_id = payment_id
         order.status = ERROR
         order.save()
         return render(request, "shop/order/callback.html", context={"status": 'failed'})
+
+
+# exclusive products
+def exclusive(request, subcategory=None):
+    exclusive_products = SubCategory.objects.prefetch_related(
+        Prefetch(
+            'products',
+            queryset=Product.objects.active_products().all()[:12],
+            to_attr='limited_products'
+        )
+    )
+    if subcategory is not None:
+        if not SubCategory.objects.filter(name=subcategory).exists():
+            messages.warning(request, "No such subcategory")
+            return redirect('home')
+        else:
+            exclusive_products = exclusive_products.filter(name=subcategory)
+
+    return render(request, "shop/products/exclusive_products.html", {"exclusive_products": exclusive_products})
+
+
+@login_required()
+def order_details(request, order_id):
+    try:
+        order = Order.objects.get(id=order_id)
+        return render(request, 'shop/order/order_details.html', {'order': order})
+    except Order.DoesNotExist:
+        messages.warning(request, 'No such order')
+        return redirect('orders')
+
+
+@login_required()
+def order_list(request):
+    orders = Order.objects.filter(user=request.user).prefetch_related('orderitem_set__product').order_by(
+        '-ordered_date')
+
+    paginator = Paginator(orders, ORDERS_LIMIT_PER_PAGE)
+    no_of_pages = paginator.num_pages
+    page_numbers = range(1, no_of_pages + 1)
+    page_number = request.GET.get('page_number', 1)
+    orders = paginator.get_page(page_number)
+
+    return render(request, 'shop/order/order_list.html', {'orders': orders, 'page_numbers': page_numbers})
+
+
+@login_required()
+def checkout(request):
+    if request.method == 'POST':
+        form = OrderForm(request.POST)
+        if form.is_valid():
+            form_values = form.cleaned_data
+
+            user = request.user
+            carts = Cart.objects.filter(user=user).select_related('product')
+            total_final_amount = sum(cart.total_final_cost for cart in carts)
+            delivery_charges = 0
+            gst = 0
+            order_amount = total_final_amount + delivery_charges + gst
+
+            # order creation
+            form_values['user_id'] = request.user.id
+            form_values['ordered_date'] = timezone.now()
+            form_values['payment_status'] = PENDING
+            form_values['order_status'] = PENDING
+            form_values['amount'] = order_amount
+
+            # razor pay login
+            razor_pay_client = razorpay_login()
+            razor_pay_order = razor_pay_client.order.create({
+                "amount": getRazorPayAmount(order_amount),
+                "currency": INR,
+                "payment_capture": "0"
+            })
+            form_values['provider_order_id'] = razor_pay_order['id']
+
+            order = Order.objects.create(**form_values)
+            order_items = []
+            for cart in carts:
+                order_items.append(OrderItem(
+                    order=order,
+                    product=cart.product,
+                    amount=cart.total_final_cost,
+                    quantity=cart.quantity
+                ))
+
+            OrderItem.objects.bulk_create(order_items)
+
+            context = {
+                'callback_url': HTTP + os.getenv('DEV_URL') + '/callback',
+                'razorpay_kay': os.getenv('RAZOR_KEY_ID'),
+                'razorpay_order_id': razor_pay_order['id'],
+                'currency': INR,
+                'amount': order_amount
+            }
+            if form_values['payment_type'] == ONLINE_PAYMENT.replace(' ', '_'):
+                return render(request, 'shop/order/payment.html', context)
+            else:
+                mail_context = {
+                    'user_name': request.user.username,
+                    'order': order,
+                    'order_items': order_items
+                }
+
+                body = get_template('shop/mail/order_placed.html').render(mail_context)
+
+                email = EmailMessage(
+                    'Majestic - Ecommerce site',
+                    body,
+                    os.getenv('SITE_EMAIL_ADDRESS'),
+                    [request.user.email]
+                )
+
+                email.content_subtype = 'html'
+                email.send(fail_silently=False)
+
+                context = {
+                    'order': order
+                }
+                return render(request, 'shop/order/order_details.html', context)
+    else:
+        form = OrderForm()
+        user = request.user
+
+        # cart_set is a reverse relationship
+        carts = Cart.objects.filter(user=user)
+        total_final_amount = sum(cart.total_final_cost for cart in carts)
+        total_net_amount = sum(cart.total_net_cost for cart in carts)
+        delivery_charges = 0
+        gst = 0
+
+        context = {
+            'form': form,
+            'districts': DISTRICTS,
+            'total_final_amount': total_final_amount,
+            'total_net_amount': total_net_amount,
+            'delivery_charges': delivery_charges,
+            'gst': gst
+        }
+        return render(request, 'shop/cart/checkout.html', context)
+
+
+# favorites - similar to cart
+def favorite(request):
+    return render(request, 'shop/status_pages/coming_soon.html')
+
+
+def user_profile(request):
+    return render(request, 'shop/status_pages/coming_soon.html')

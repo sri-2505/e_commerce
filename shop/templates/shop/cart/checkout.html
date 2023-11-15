@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-<title>Place your order | Majestic</title>
+<title>Checkout form | Majestic</title>
 {% endblock title %}
 
 {% block content %}
@@ -23,16 +23,9 @@
             </div>
         </div>
         <div class="row h-100">
-            <div class="col-6">
+            <div class="col-md-6"   >
                 <form method='post'>
                     {% csrf_token %}
-
-                    {% if product %}
-                    <!--Sent the product id and quantity-->
-                    <input value={{ product.id }} type="hidden" name="product_id"/>
-                    <input value={{ product.order_quantity }} type="hidden" name="order_quantity"/>
-                    <input value={{ product.order_amount }} type="hidden" name="order_amount"/>
-                    {% endif %}
 
                     <!--State-->
                     <div class="mb-3">
@@ -106,21 +99,43 @@
                     </div>
                 </form>
             </div>
-            <div class="col-6">
-                <div class="row h-100 mx-auto">
-                    <div class="col-md-8 mx-auto">
-                        <img src="{% static product.product_image %}" class="img-fluid rounded-start p-2" alt="...">
+            <div class="col-md-6 my-4">
+                <div class="row my-1">
+                    <div class="col-md-5">
+                        <h5>Total net amount</h5>
                     </div>
-                    <div class="col-md-6 mx-auto">
-                        <div class="card-body">
-                            <h5 class="card-title" style="display: inline;">{{ product.name }}</h5>
-                            {% if product.trending %}
-                            <span class='badge bg-warning'>trending</span>
-                            {% endif %}
-                            <p class="card-text">{{ product.description }}</p>
-                            <h6 class='my-2 text-danger'>Current price: Rs. <s>{{ product.original_price }}</s></h6>
-                            <h5 class='my-2 text-info'>Selling price: Rs. {{ product.selling_price }} </h5>
-                        </div>
+
+                    <div class="col-md-5">
+                        <h5>Rs. {{ total_net_amount }}</h5>
+                    </div>
+                </div>
+
+                <div class="row my-1">
+                    <div class="col-md-5">
+                        <h5>delivery charge</h5>
+                    </div>
+
+                    <div class="col-md-5">
+                        <h5>Rs. {{ delivery_charges }}</h5>
+                    </div>
+                </div>
+
+                <div class="row border-bottom my-1">
+                    <div class="col-md-5">
+                        <h5>GST</h5>
+                    </div>
+
+                    <div class="col-md-5">
+                        <h5>Rs. {{ gst }}</h5>
+                    </div>
+                </div>
+
+                <div class="row border-bottom my-3">
+                    <div class="col-md-5">
+                        <h5>Final amount</h5>
+                    </div>
+                    <div class="col-md-5">
+                        <h5>Rs. {{ total_final_amount }}</h5>
                     </div>
                 </div>
             </div>
@@ -129,7 +144,7 @@
 </section>
 
 <!--footer-->
-    {% include "shop/includes/footer.html" %}
+{% include "shop/includes/footer.html" %}
 
 {% comment %} Dependent fields {% endcomment %}
 {% comment %}
