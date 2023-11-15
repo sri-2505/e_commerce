@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import BaseUserManager, AbstractUser
+from django.contrib.auth.models import BaseUserManager, AbstractUser, PermissionsMixin
 import datetime
 import os
 from utils.constants import *
@@ -34,7 +34,7 @@ class UserManager(BaseUserManager):
 
 
 # custom user model
-class User(AbstractUser):
+class User(AbstractUser, PermissionsMixin):
     username = models.CharField(max_length=50, blank=False)
     email = models.EmailField(max_length=255, unique=True)
     date_joined = models.DateTimeField(default=timezone.now)
@@ -47,27 +47,12 @@ class User(AbstractUser):
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["username"]
 
-    def __str__(self):
-        return self.email
-
-    def has_perm(self, perm, obj=None):
-        "Does the user have a specific permission?"
-        # Simplest possible answer: Yes, always
-        if self.is_admin:
-            return True
-        else:
-            return False
-
-    def has_module_perms(self, app_label):
-        "Does the user have permissions to view the app `app_label`?"
-        if self.is_admin:
-            return True
-        else:
-            return False
-
     @property
     def is_staff(self):
         return self.is_admin
+
+    def __str__(self):
+        return self.email
 
 
 # give file name while uploading
