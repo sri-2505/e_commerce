@@ -129,10 +129,6 @@ USE_TZ = True
 
 LOGIN_URL = '/login'
 
-LOGIN_REDIRECT_URL = ''  # home page URL
-
-LOGOUT_REDIRECT_URL = ''  # home page URL
-
 AUTH_USER_MODEL = 'shop.User'
 
 # Static files (CSS, JavaScript, Images)
@@ -152,6 +148,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGGING_HANDLERS = ['info_log', 'error_log']
 
 LOGGING = {
     'version': 1,
@@ -189,7 +187,7 @@ LOGGING = {
             'class': 'rollbar.logger.RollbarHandler',
             'formatter': 'standard',
             'level': 'WARNING',
-            'environment': 'development' if DEBUG else 'production',
+            'environment': 'development',
             'access_token': os.getenv('ROLLBAR_ACCESS_TOKEN')
         },
     },
@@ -198,13 +196,13 @@ LOGGING = {
     'loggers': {
         'django': {
             'level': os.getenv('LOG_LEVEL'),
-            'handlers': ['info_log', 'error_log'],
+            'handlers': LOGGING_HANDLERS if DEBUG else LOGGING_HANDLERS + ['rollbar'],
         },
-        # 'django.db.backends': {
-        #     'level': 'DEBUG',  # warning and higher level logs
-        #     'handlers': ['query_log'],
-        #     'propagate': True
-        # }
+        'django.db.backends': {
+            'level': 'DEBUG',  # warning and higher level logs
+            'handlers': ['query_log'],
+            'propagate': True
+        }
     }
 }
 
@@ -230,7 +228,7 @@ EMAIL_PORT = os.getenv('EMAIL_PORT')
 # Rollbar
 ROLLBAR = {
     'access_token': os.getenv('ROLLBAR_ACCESS_TOKEN'),
-    'environment': 'development' if DEBUG else 'production',
+    'environment': 'development',
     'code_version': '1.0',
     'root': BASE_DIR,
 }

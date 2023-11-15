@@ -9,7 +9,7 @@ from django.http import JsonResponse, HttpResponse
 from django.utils import timezone
 from django.db.models import F, ExpressionWrapper, FloatField, Prefetch, Count, Subquery, OuterRef
 from django.core.paginator import Paginator
-from django.core.mail import EmailMultiAlternatives, EmailMessage
+from django.core.mail import EmailMessage
 from django.core.exceptions import ValidationError
 from django.template.loader import get_template
 import logging
@@ -384,7 +384,6 @@ def callback(request):
             "order_id"
         )
 
-        # {"error[code]": "SERVER_ERROR", "error[description]": "We are facing some trouble completing your request at the moment. Please try again shortly.", "error[source]": "NA", "error[step]": "NA", "error[reason]": "NA", "error[metadata]": "{}"}
         order = Order.objects.get(provider_order_id=provider_order_id)
         order.payment_id = payment_id
         order.status = ERROR
@@ -568,3 +567,12 @@ def subcategories(request, subcategory=None):
             subcategories = subcategories.filter(name=subcategory)
 
     return render(request, 'shop/products/subcategories.html', {'subcategories': subcategories})
+
+
+# favorites - similar to cart
+def favorite(request):
+    return render(request, 'shop/status_pages/coming_soon.html')
+
+
+def user_profile(request):
+    return render(request, 'shop/status_pages/coming_soon.html')
