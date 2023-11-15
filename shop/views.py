@@ -235,7 +235,7 @@ def cart_list(request):
     if request.user.is_authenticated:
         user = request.user
         # cart_set is a reverse relationship
-        carts = Cart.objects.filter(user=user).select_related('product')
+        carts = Cart.objects.filter(user=user, is_purchased=False).select_related('product')
         total_final_amount = sum(cart.total_final_cost for cart in carts)
         total_net_amount = sum(cart.total_net_cost for cart in carts)
         delivery_charges = 0
@@ -325,14 +325,6 @@ def create_order(request):
                     'order': order
                 }
                 return render(request, 'shop/order/order_details.html', context)
-        else:
-            try:
-                form.full_clean()
-                return redirect('create_order')  # This will trigger validation without raising exceptions
-            except ValidationError:
-                # Handle the validation error here and display a user-friendly message.
-                error_message = "Invalid PIN code. Please enter a 6-digit PIN."
-                return HttpResponse(error_message)
     else:
         form = OrderForm()
         product_id = request.GET.get('product_id')
@@ -488,6 +480,8 @@ def checkout(request):
                 body = get_template('shop/mail/order_placed.html').render(mail_context)
 
                 send_order_details_mail.delay(request.user.email, body)
+
+                Cart.objects.filter(user=request.user).update(created_at__gt=timezone.now(), is_purchased=True)
 
                 context = {
                     'order': order
