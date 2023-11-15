@@ -4,10 +4,9 @@ from django import forms
 
 class LoginForm(forms.Form):
     # form fields
-    username = forms.CharField(widget=forms.TextInput(attrs={
+    email = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control',
-        'id': 'validationCustom02',
-        'placeholder': 'Please enter you name here'
+        'placeholder': 'Your email id'
     }))
 
     password = forms.CharField(widget=forms.PasswordInput(attrs={

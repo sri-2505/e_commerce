@@ -129,6 +129,8 @@ USE_TZ = True
 
 LOGIN_URL = '/login'
 
+AUTH_USER_MODEL = 'shop.User'
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 

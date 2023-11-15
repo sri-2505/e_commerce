@@ -1,3 +1,5 @@
+import datetime
+
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -94,20 +96,20 @@ def register(request):
     else:
         form = CustomUserForm()
 
-    return render(request, 'shop/register.html', {'form': form})
+    return render(request, 'shop/authentication/register.html', {'form': form})
 
 
 # login
 def login_page(request):
     if request.method == 'POST':
-        user_name = request.POST.get('username')
+        email = request.POST.get('email')
         pass_word = request.POST.get('password')
-        user = authenticate(request, username=user_name, password=pass_word)
+        user = authenticate(request, username=email, password=pass_word)
         if user is not None:
             login(request, user)
             return redirect('/')
         else:
-            messages.error(request, 'Invalid user name or password')
+            messages.error(request, 'Invalid email or password')
             return redirect('/login')
     else:
         form = LoginForm()
@@ -115,7 +117,7 @@ def login_page(request):
     if 'next' in request.GET:
         messages.info(request, 'Login to continue...')
 
-    return render(request, 'shop/login.html', {'form': form})
+    return render(request, 'shop/authentication/login.html', {'form': form})
 
 
 # logout
@@ -519,7 +521,7 @@ def checkout(request):
 
         context = {
             'form': form,
-            'districts': DISTRICTS,
+            'districts': TAMIL_NADU_DISTRICTS,
             'total_final_amount': total_final_amount,
             'total_net_amount': total_net_amount,
             'delivery_charges': delivery_charges,
