@@ -1,0 +1,26 @@
+<!--Paginator-->
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+        <li class="page-item {% if not elements.has_previous %} disabled {% endif %}">
+            <a class="page-link"
+               href="{% if elements.has_previous %} ?page_number={{ elements.previous_page_number }} {% else %} # {% endif %}"
+               aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+
+        {% for page_number in page_numbers %}
+        <li class="page-item {% if page_number == elements.number %} active {% endif %}"><a class="page-link"
+                                                                                          href="?page_number={{ page_number }}">{{ page_number }}</a></li>
+        {% endfor %}
+
+        <li class="page-item {% if not elements.has_next %} disabled {% endif %}">
+            <a class="page-link"
+               href="{% if elements.has_next %} ?page_number={{ elements.next_page_number }} {% else %} # {% endif %}"
+               aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+
+    </ul>
+</nav>

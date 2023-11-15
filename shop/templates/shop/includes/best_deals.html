@@ -16,7 +16,7 @@
                         <!--Active carousel-->
                         <div class="carousel-item active" data-bs-interval="10000">
                             <div class="row h-100 align-items-center g-2">
-                                {% for best_deal in best_deals|slice:":4" %}
+                                {% for best_deal in best_deals|slice:"0:4" %}
                                 <div class="col-sm-6 col-md-3 mb-3 mb-md-0 h-100">
                                     <div class="card card-span h-100 text-white"><img class="img-fluid h-100"
                                                                                       src='{% static best_deal.product_image %}'
@@ -28,7 +28,7 @@
                                                     class="text-600 me-2 text-decoration-line-through">{{ best_deal.original_price }}</span><span
                                                     class="text-primary">{{ best_deal.selling_price }}</span></div>
                                         </div>
-                                        <a class="stretched-link" href="{% url 'product' best_deal.name %}"></a>
+                                        <a class="stretched-link" href="{% url 'product' best_deal.id %}"></a>
                                     </div>
                                 </div>
                                 {% endfor %}
@@ -51,7 +51,7 @@
                                                     class="text-600 me-2 text-decoration-line-through">{{ best_deal.original_price }}</span><span
                                                     class="text-primary">{{ best_deal.selling_price }}</span></div>
                                         </div>
-                                        <a class="stretched-link" href="{% url 'product' best_deal.name %}"></a>
+                                        <a class="stretched-link" href="{% url 'product' best_deal.id %}"></a>
                                     </div>
                                 </div>
                                 {% endfor %}
@@ -75,7 +75,7 @@
                                                     class="text-600 me-2 text-decoration-line-through">{{ best_deal.original_price }}</span><span
                                                     class="text-primary">{{ best_deal.selling_price }}</span></div>
                                         </div>
-                                        <a class="stretched-link" href="{% url 'product' best_deal.name %}"></a>
+                                        <a class="stretched-link" href="{% url 'product' best_deal.id %}"></a>
                                     </div>
                                 </div>
                                 {% endfor %}
@@ -99,7 +99,7 @@
                                                     class="text-600 me-2 text-decoration-line-through">{{ best_deal.original_price }}</span><span
                                                     class="text-primary">{{ best_deal.selling_price }}</span></div>
                                         </div>
-                                        <a class="stretched-link" href="{% url 'product' best_deal.name %}"></a>
+                                        <a class="stretched-link" href="{% url 'product' best_deal.id %}"></a>
                                     </div>
                                 </div>
                                 {% endfor %}
@@ -123,8 +123,9 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 d-flex justify-content-center mt-5"><a class="btn btn-lg btn-dark" href="#!">View
-                All </a></div>
+            <div class="col-12 d-flex justify-content-center mt-5">
+                <a class="btn btn-lg btn-dark" href="{% url 'subcategories' %}?is_best_deals=True">View All </a>
+            </div>
         </div>
     </div>
     <!-- end of .container-->

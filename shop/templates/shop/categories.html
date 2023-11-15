@@ -6,121 +6,151 @@
 {% endblock title %}
 
 {% block content %}
-    {% include "shop/includes/navbar.html" %}
+{% include "shop/includes/navbar.html" %}
+{% include "shop/includes/message.html" %}
 
-<div class="bg-holder overlay overlay-light" style="background-image: url('{% static 'images/gallery/header-bg.png' %}'); background-size: cover;">
-    </div>
+<div class="bg-holder overlay overlay-light"
+     style="background-image: url('{% static 'images/gallery/header-bg.png' %}'); background-size: cover;">
+</div>
 
+{% if categories %}
     {% for category in categories %}
     <section class="py-6">
-    <div class="container">
+        <div class="container">
+            <div class="row h-100">
+                <div class="col-lg-7 mb-6">
+                    <h5 class="fs-3 fs-lg-5 lh-sm mb-3">{{ category.name|capfirst }}</h5>
+                    <hr style="background-color:red; padding:2px; width: 10%"/>
+                </div>
+                <div class="col-12">
+                    <div class="carousel slide" id="carouselNewArrivals" data-bs-ride="carousel">
+                        <div class="carousel-inner">
 
-        <div class="row h-100">
-            <div class="col-lg-7 mb-6">
-                <h5 class="fs-3 fs-lg-5 lh-sm mb-3">{{ category.name|capfirst }}</h5>
-                <hr style="background-color:red; padding:2px; width: 10%"/>
-            </div>
-            <div class="col-12">
-                <div class="carousel slide" id="carouselNewArrivals" data-bs-ride="carousel">
-                    <div class="carousel-inner">
-
-                        {% if category.subcategories.all|slice:"0:4" %}
-                        <div class="carousel-item active" data-bs-interval="10000">
-                            <div class="row h-100 align-items-center g-2">
-                                {% for subcategory in category.subcategories.all|slice:"0:4" %}
-                                <div class="col-sm-6 col-md-3 mb-3 mb-md-0 h-100">
-                                    <div class="card card-span h-100 text-white"><img class="card-img h-100"
-                                                                                      src="{% static subcategory.image %}"
-                                                                                      alt="..."/>
-                                        <div class="card-img-overlay ps-0"></div>
-                                        <div class="card-body ps-0 bg-200">
-                                            <h5 class="fw-bold text-1000 text-truncate">{{ subcategory.name }}</h5>
-                                        </div>
-                                        <a class="stretched-link" href="#"></a>
-                                    </div>
-                                </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        {% else %}
-                            <div class="carousel-item active">
-                            <div class="row h-100 align-items-center g-2 p-3">
-                                Categories will come soon...
-                            </div>
-                        </div>
-                        {% endif %}
-
-                        {% if category.subcategories.all|slice:"4:8" %}
-                        <div class="carousel-item" data-bs-interval="5000">
-                            <div class="row h-100 align-items-center g-2">
-                                {% for subcategory in category.subcategories.all|slice:"4:8" %}
-                                <div class="col-sm-6 col-md-3 mb-3 mb-md-0 h-100">
-                                    <div class="card card-span h-100 text-white"><img class="card-img h-100"
-                                                                                      src="{% static subcategory.image %}"
-                                                                                      alt="..."/>
-                                        <a class="stretched-link" href="#"></a>
-                                    </div>
-                                </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        {% endif %}
-
-                        {% if category.subcategories.all|slice:"8:12" %}
-                        <div class="carousel-item" data-bs-interval="3000">
-                            <div class="row h-100 align-items-center g-2">
-                                {% for subcategory in category.subcategories.all|slice:"8:12" %}
-                                <div class="col-sm-6 col-md-3 mb-3 mb-md-0 h-100">
-                                    <div class="card card-span h-100 text-white"><img class="card-img h-100"
-                                                                                      src="{% static subcategory.image %}"
-                                                                                      alt="..."/>
-                                        <a class="stretched-link" href="#"></a>
-                                    </div>
-                                </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        {% endif %}
-
-                        {% if category.subcategories.all|slice:"12:16" %}
-                        <div class="carousel-item">
-                            <div class="row h-100 align-items-center g-2">
-                                <div class="col-sm-6 col-md-3 mb-3 mb-md-0 h-100">
-                                    {% for subcategory in category.subcategories.all|slice:"12:16" %}
+                            {% if category.all_subcategories|slice:"0:4" %}
+                            <div class="carousel-item active" data-bs-interval="10000">
+                                <div class="row h-100 align-items-center g-2">
+                                    {% for subcategory in category.all_subcategories|slice:"0:4" %}
                                     <div class="col-sm-6 col-md-3 mb-3 mb-md-0 h-100">
                                         <div class="card card-span h-100 text-white"><img class="card-img h-100"
                                                                                           src="{% static subcategory.image %}"
                                                                                           alt="..."/>
-                                            <a class="stretched-link" href="#"></a>
+                                            <div class="card-img-overlay ps-0"></div>
+                                            <div class="card-body ps-0 bg-200">
+                                                <h5 class="fw-bold text-1000 text-truncate">{{ subcategory.name }}</h5>
+                                            </div>
+                                            <a class="stretched-link"
+                                               href="{% url 'subcategory_products' category.id subcategory.id %}"></a>
                                         </div>
                                     </div>
                                     {% endfor %}
                                 </div>
                             </div>
-                        </div>
-                        {% endif %}
-
-                        {% if best_deals|slice:"4:8" %}
-                                <div class="row">
-                                    <button class="carousel-control-prev" type="button"
-                                            data-bs-target="#carouselNewArrivals" data-bs-slide="prev"><span
-                                            class="carousel-control-prev-icon" aria-hidden="true"></span><span
-                                            class="visually-hidden">Previous</span></button>
-                                    <button class="carousel-control-next" type="button"
-                                            data-bs-target="#carouselNewArrivals" data-bs-slide="next"><span
-                                            class="carousel-control-next-icon" aria-hidden="true"></span><span
-                                            class="visually-hidden">Next </span></button>
+                            {% else %}
+                            <div class="carousel-item active">
+                                <div class="row h-100 align-items-center g-2 p-3">
+                                    Categories will come soon...
                                 </div>
-                        {% endif %}
                             </div>
+                            {% endif %}
+
+                            {% if category.all_subcategories|slice:"4:8" %}
+                            <div class="carousel-item" data-bs-interval="5000">
+                                <div class="row h-100 align-items-center g-2">
+                                    {% for subcategory in category.all_subcategories|slice:"4:8" %}
+                                    <div class="col-sm-6 col-md-3 mb-3 mb-md-0 h-100">
+                                        <div class="card card-span h-100 text-white"><img class="card-img h-100"
+                                                                                          src="{% static subcategory.image %}"
+                                                                                          alt="..."/>
+                                            <div class="card-img-overlay ps-0"></div>
+                                            <div class="card-body ps-0 bg-200">
+                                                <h5 class="fw-bold text-1000 text-truncate">{{ subcategory.name }}</h5>
+                                            </div>
+                                            <a class="stretched-link"
+                                               href="{% url 'subcategory_products' category.id subcategory.id %}"></a>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            {% if category.all_subcategories|slice:"8:12" %}
+                            <div class="carousel-item" data-bs-interval="3000">
+                                <div class="row h-100 align-items-center g-2">
+                                    {% for subcategory in category.all_subcategories|slice:"8:12" %}
+                                    <div class="col-sm-6 col-md-3 mb-3 mb-md-0 h-100">
+                                        <div class="card card-span h-100 text-white"><img class="card-img h-100"
+                                                                                          src="{% static subcategory.image %}"
+                                                                                          alt="..."/>
+                                            <div class="card-img-overlay ps-0"></div>
+                                            <div class="card-body ps-0 bg-200">
+                                                <h5 class="fw-bold text-1000 text-truncate">{{ subcategory.name }}</h5>
+                                            </div>
+                                            <a class="stretched-link"
+                                               href="{% url 'subcategory_products' category.id subcategory.id %}"></a>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            {% if category.all_subcategories|slice:"12:16" %}
+                            <div class="carousel-item">
+                                <div class="row h-100 align-items-center g-2">
+                                    <div class="col-sm-6 col-md-3 mb-3 mb-md-0 h-100">
+                                        {% for subcategory in category.all_subcategories|slice:"12:16" %}
+                                        <div class="col-sm-6 col-md-3 mb-3 mb-md-0 h-100">
+                                            <div class="card card-span h-100 text-white"><img class="card-img h-100"
+                                                                                              src="{% static subcategory.image %}"
+                                                                                              alt="..."/>
+                                                <div class="card-img-overlay ps-0"></div>
+                                                <div class="card-body ps-0 bg-200">
+                                                    <h5 class="fw-bold text-1000 text-truncate">{{ subcategory.name }}</h5>
+                                                </div>
+                                                <a class="stretched-link"
+                                                   href="{% url 'subcategory_products' category.id subcategory.id %}"></a>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            {% if category.all_subcategories|slice:"4:8" %}
+                            <div class="row">
+                                <button class="carousel-control-prev" type="button"
+                                        data-bs-target="#carouselNewArrivals" data-bs-slide="prev"><span
+                                        class="carousel-control-prev-icon" aria-hidden="true"></span><span
+                                        class="visually-hidden">Previous</span></button>
+                                <button class="carousel-control-next" type="button"
+                                        data-bs-target="#carouselNewArrivals" data-bs-slide="next"><span
+                                        class="carousel-control-next-icon" aria-hidden="true"></span><span
+                                        class="visually-hidden">Next </span></button>
+                            </div>
+                            {% endif %}
                         </div>
                     </div>
+                </div>
             </div>
         </div>
     </section>
     {% endfor %}
+{% else %}
+    <section class="py-6">
+        <div class="container">
+            <div class="row h-100">
+                <div class="col-12">
+                    No categories found. Please check later.
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <!--footer-->
-    {% include "shop/includes/footer.html" %}
+{% endif %}
+
+<!--footer-->
+{% include "shop/includes/footer.html" %}
 
 {% endblock content %}

@@ -7,6 +7,7 @@
 
 {% block content %}
 {% include "shop/includes/navbar.html" %}
+{% include "shop/includes/message.html" %}
 
 
 <div class="bg-holder overlay overlay-light"
@@ -53,31 +54,13 @@
                         Total amount :Rs. {{ order.amount }}
                     </div>
                 </div>
+
             </div>
             {% endfor %}
         </div>
 
         <!--Paginator-->
-        <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center">
-                <li class="page-item {% if not orders.has_previous %} disabled {% endif %}">
-                    <a class="page-link" href="{% if orders.has_previous %} ?page_number={{ orders.previous_page_number }} {% else %} # {% endif %}" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-
-                {% for page_number in page_numbers %}
-                    <li class="page-item {% if page_number == orders.number %} active {% endif %}"><a class="page-link" href="?page_number={{ page_number }}">{{ page_number }}</a></li>
-                {% endfor %}
-
-                <li class="page-item {% if not orders.has_next %} disabled {% endif %}">
-                    <a class="page-link" href="{% if orders.has_next %} ?page_number={{ orders.next_page_number }} {% else %} # {% endif %}" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-
-            </ul>
-        </nav>
+    {% include "shop/includes/pagination.html" with elements=orders %}
     </div>
 </section>
 

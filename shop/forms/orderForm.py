@@ -1,21 +1,23 @@
 from ..models import Order
 from django import forms
 from utils.constants import *
+from django.core.validators import RegexValidator
 
 
 class OrderForm(forms.ModelForm):
     # form fields
-    state = forms.CharField(
-        # choices = STATES + [('', 'Select an option')],
-        widget=forms.TextInput(attrs={
+    state = forms.ChoiceField(
+        choices=STATES + [('', 'Select an option')],
+        widget=forms.Select(attrs={
             'class': 'form-control',
             'id': 'state',
             'placeholder': 'Enter your state'
         })
     )
 
-    district = forms.CharField(
-        widget=forms.TextInput(attrs={
+    district = forms.ChoiceField(
+        choices=TAMIL_NADU_DISTRICTS + [('', 'Select an option')],
+        widget=forms.Select(attrs={
             'class': 'form-control',
             'id': 'district',
             'placeholder': 'Enter the district'
@@ -37,6 +39,7 @@ class OrderForm(forms.ModelForm):
     )
 
     pincode = forms.CharField(
+        validators=[RegexValidator(r'\d{6}$', 'Invalid pincode', 'Invalid_pincode')],
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': 'Please enter you name here'
