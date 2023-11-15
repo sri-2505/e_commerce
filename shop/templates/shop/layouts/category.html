@@ -65,7 +65,7 @@
                                                                         class="text-primary">{{ product.original_price }}</span>
                                                                 </div>
                                                             </div>
-                                                            <<a class="stretched-link" href="{% url 'product' product.name %}"></a>
+                                                            <<a class="stretched-link" href="{% url 'product' product.id %}"></a>
                                                         </div>
                                                     </div>
                                                     {% endfor %}
@@ -92,7 +92,7 @@
                                                                         class="text-primary">{{ product.original_price }}</span>
                                                                 </div>
                                                             </div>
-                                                            <<a class="stretched-link" href="{% url 'product' product.name %}"></a>
+                                                            <<a class="stretched-link" href="{% url 'product' product.id %}"></a>
                                                         </div>
                                                     </div>
                                                     {% endfor %}
@@ -119,7 +119,7 @@
                                                                         class="text-primary">{{ product.original_price }}</span>
                                                                 </div>
                                                             </div>
-                                                            <<a class="stretched-link" href="{% url 'product' product.name %}"></a>
+                                                            <<a class="stretched-link" href="{% url 'product' product.id %}"></a>
                                                         </div>
                                                     </div>
                                                     {% endfor %}
@@ -145,7 +145,7 @@
                                         </div>
                                     </div>
                                     <div class="col-12 d-flex justify-content-center mt-5"><a
-                                            class="btn btn-lg btn-dark" href="#!">View All </a></div>
+                                            class="btn btn-lg btn-dark" href="{% url 'categories' %}">View All </a></div>
                                 </div>
                                 {% endfor %}
                             </div>

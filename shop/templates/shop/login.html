@@ -6,55 +6,109 @@
 {% endblock title %}
 
 {% block content %}
-    {% include "shop/includes/navbar.html" %}
+{% include "shop/includes/message.html" %}
 
+<div class="bg-holder overlay overlay-light"
+     style="background-image: url('{% static 'images/gallery/header-bg.png' %}'); background-size: cover;">
+</div>
 
-<div class="bg-holder overlay overlay-light" style="background-image: url('{% static 'images/gallery/header-bg.png' %}'); background-size: cover;">
+<section class="section min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+
+                <div class="d-flex justify-content-center py-4">
+                    <a href="{% url 'home' %}" class="logo d-flex align-items-center w-auto">
+                        <img src="{% static 'images/gallery/logo.png' %}" alt="">
+                        <span class="text-1000 fs-0 fw-bold ms-2">Mejestic</span>
+                    </a>
+                </div><!-- End Logo -->
+
+                <div class="card mb-3">
+
+                    <div class="card-body">
+
+                        <div class="pt-4 pb-2">
+                            <h5 class="card-title text-center pb-0 fs-4">Login to Your Account</h5>
+                            <p class="text-center small">Enter your username & password to login</p>
+                        </div>
+
+                        <form class="row g-3" method="post" action="">
+                            {% csrf_token %}
+                            <div class="col-12">
+                                <label class="form-label">Username</label>
+                                <div class="input-group">
+                                    <span class="input-group-text" id="inputGroupPrepend">@</span>
+                                    {{ form.username }}
+                                </div>
+                                <div class="text-danger">
+                                    {{ form.errors.username }}
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label">Password</label>
+                                {{ form.password }}
+                                <div class="text-danger">
+                                    {{ form.errors.password }}
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <button class="btn btn-dark w-100" type="submit">Login</button>
+                            </div>
+                            <div class="col-12">
+                                <p class="small mb-0">Don't have account? <a href="{% url 'register' %}" class="text-secondary">Create an
+                                    account</a></p>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-<section class="py-6">
-    <div class="container">
+</section>
 
-        <div class="row h-100">
-            <div class="col-lg-7 mb-4">
-                <h5 class="fs-3 fs-lg-5 lh-sm mb-3">Login to continue</h5>
-                <hr style="background-color:red; padding:2px; width: 10%"/>
-            </div>
-          <div class="col-6 mx-auto">
-          <form method='post' action=''>
-          <!--Email-->
-          <div class="mb-3">
-            <label for="LoginForm" class="form-label">User name</label>
-            {{ form.username }}
-            {% csrf_token %}
-            {% if form.errors.username %}
-              <div class="text-danger">
-                {{ form.errors.username }}
-              </div>
-            {% endif %}
-          </div>
 
-          <!--password-->
-          <div class="mb-3">
-            <label for="LoginForm" class="form-label">Password</label>
-            {{ form.password }}
-            {% if form.errors.password %}
-              <div class="text-danger">
-                {{ form.errors.password }}
-              </div>
-            {% endif %}
-          </div>
+<!--<section class="py-6">-->
+<!--    <div class="container">-->
+<!--        <div class="row h-100">-->
+<!--            <div class="col-6 mx-auto">-->
+<!--                <form method='post' action=''>-->
+<!--                    &lt;!&ndash;Email&ndash;&gt;-->
+<!--                    <div class="mb-3">-->
+<!--                        <label class="form-label">User name</label>-->
+<!--                        {{ form.username }}-->
+<!--                        {% csrf_token %}-->
+<!--                        {% if form.errors.username %}-->
+<!--                        <div class="text-danger">-->
+<!--                            {{ form.errors.username }}-->
+<!--                        </div>-->
+<!--                        {% endif %}-->
+<!--                    </div>-->
 
-          <!--Submit-->
-          <div class="col-12">
-            <button class="btn btn-primary" type="submit">Login</button>
-          </div>
-        </form>
-          </div>
-        </div>
-    </section>
+<!--                    &lt;!&ndash;password&ndash;&gt;-->
+<!--                    <div class="mb-3">-->
+<!--                        <label class="form-label">Password</label>-->
+<!--                        {{ form.password }}-->
+<!--                        {% if form.errors.password %}-->
+<!--                        <div class="text-danger">-->
+<!--                            {{ form.errors.password }}-->
+<!--                        </div>-->
+<!--                        {% endif %}-->
+<!--                    </div>-->
 
-<!--footer-->
-    {% include "shop/includes/footer.html" %}
-    
+<!--                    &lt;!&ndash;Submit&ndash;&gt;-->
+<!--                    <div class="col-12">-->
+<!--                        <button class="btn btn-primary" type="submit">Login</button>-->
+<!--                    </div>-->
+<!--                </form>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</section>-->
+
+
 {% endblock content %}

@@ -10,6 +10,7 @@
                 <div class="carousel slide" id="carouselNewArrivals" data-bs-ride="carousel">
                     <div class="carousel-inner">
 
+                        {% if new_arrivals|slice:"0:4" %}
                         <div class="carousel-item active" data-bs-interval="10000">
                             <div class="row h-100 align-items-center g-2">
                                 {% for new_arrival in new_arrivals|slice:"0:4" %}
@@ -21,13 +22,15 @@
                                             <h6 class="text-primary">{{ new_arrival.selling_price }}</h6>
                                             <p class="text-400 fs-1">{{ new_arrival.name }}</p>
                                         </div>
-                                        <a class="stretched-link" href="{% url 'product' new_arrival.name %}"></a>
+                                        <a class="stretched-link" href="{% url 'product' new_arrival.id %}"></a>
                                     </div>
                                 </div>
                                 {% endfor %}
                             </div>
                         </div>
+                        {% endif %}
 
+                        {% if new_arrivals|slice:"4:8" %}
                         <div class="carousel-item" data-bs-interval="5000">
                             <div class="row h-100 align-items-center g-2">
                                 {% for new_arrival in new_arrivals|slice:"4:8" %}
@@ -39,13 +42,15 @@
                                             <h6 class="text-primary">{{ new_arrival.selling_price }}</h6>
                                             <p class="text-400 fs-1">{{ new_arrival.name }}</p>
                                         </div>
-                                        <a class="stretched-link" href="{% url 'product' new_arrival.name %}"></a>
+                                        <a class="stretched-link" href="{% url 'product' new_arrival.id %}"></a>
                                     </div>
                                 </div>
                                 {% endfor %}
                             </div>
                         </div>
+                        {% endif %}
 
+                        {% if new_arrivals|slice:"8:12" %}
                         <div class="carousel-item" data-bs-interval="3000">
                             <div class="row h-100 align-items-center g-2">
                                 {% for new_arrival in new_arrivals|slice:"8:12" %}
@@ -57,13 +62,15 @@
                                             <h6 class="text-primary">{{ new_arrival.selling_price }}</h6>
                                             <p class="text-400 fs-1">{{ new_arrival.name }}</p>
                                         </div>
-                                        <a class="stretched-link" href="{% url 'product' new_arrival.name %}"></a>
+                                        <a class="stretched-link" href="{% url 'product' new_arrival.id %}"></a>
                                     </div>
                                 </div>
                                 {% endfor %}
                             </div>
                         </div>
+                        {% endif %}
 
+                        {% if new_arrivals|slice:"12:16" %}
                         <div class="carousel-item">
                             <div class="row h-100 align-items-center g-2">
                                 <div class="col-sm-6 col-md-3 mb-3 mb-md-0 h-100">
@@ -76,12 +83,14 @@
                                                 <h6 class="text-primary">{{ new_arrival.selling_price }}</h6>
                                                 <p class="text-400 fs-1">{{ new_arrival.name }}</p>
                                             </div>
-                                            <a class="stretched-link" href="#"></a>
+                                            <a class="stretched-link" href="{% url 'product' new_arrival.id %}"></a>
                                         </div>
                                     </div>
                                     {% endfor %}
                                 </div>
+                                {% endif %}
 
+                                {% if new_arrivals|slice:"0:4" %}
                                 <div class="row">
                                     <button class="carousel-control-prev" type="button"
                                             data-bs-target="#carouselNewArrivals" data-bs-slide="prev"><span
@@ -92,6 +101,7 @@
                                             class="carousel-control-next-icon" aria-hidden="true"></span><span
                                             class="visually-hidden">Next </span></button>
                                 </div>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
