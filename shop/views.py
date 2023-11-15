@@ -10,6 +10,7 @@ from django.core.paginator import Paginator
 from django.core.mail import EmailMessage
 from django.core.exceptions import ValidationError
 from django.template.loader import get_template
+import logging
 
 # forms
 from shop.forms.userRegisterationForm import CustomUserForm
@@ -39,6 +40,7 @@ from utils.helper import (
     verify_signature
 )
 
+logger = logging.getLogger('django')
 load_dotenv()
 
 
