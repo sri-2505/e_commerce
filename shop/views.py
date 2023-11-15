@@ -7,10 +7,9 @@ from django.http import JsonResponse, HttpResponse
 from django.utils import timezone
 from django.db.models import F, ExpressionWrapper, FloatField, Prefetch, Count, Subquery, OuterRef
 from django.core.paginator import Paginator
-from django.core.mail import EmailMultiAlternatives, EmailMessage
+from django.core.mail import EmailMessage
 from django.core.exceptions import ValidationError
 from django.template.loader import get_template
-from django.template import Context
 
 # forms
 from shop.forms.userRegisterationForm import CustomUserForm
