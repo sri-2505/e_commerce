@@ -1,5 +1,4 @@
 import datetime
-
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -236,7 +235,7 @@ def cart_list(request):
     if request.user.is_authenticated:
         user = request.user
         # cart_set is a reverse relationship
-        carts = Cart.objects.filter(user=user).select_related('product')
+        carts = Cart.objects.filter(user=user, is_purchased=False).select_related('product')
         total_final_amount = sum(cart.total_final_cost for cart in carts)
         total_net_amount = sum(cart.total_net_cost for cart in carts)
         delivery_charges = 0
