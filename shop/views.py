@@ -324,7 +324,6 @@ def callback(request):
             "order_id"
         )
 
-        # {"error[code]": "SERVER_ERROR", "error[description]": "We are facing some trouble completing your request at the moment. Please try again shortly.", "error[source]": "NA", "error[step]": "NA", "error[reason]": "NA", "error[metadata]": "{}"}
         order = Order.objects.get(provider_order_id=provider_order_id)
         order.payment_id = payment_id
         order.status = ERROR
