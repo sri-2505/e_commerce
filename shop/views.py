@@ -160,7 +160,7 @@ def categories(request, category=None):
         categories = categories.filter(name=category)
 
     if not categories.exists():
-        messages.info(request, 'No subcategory found in this category')
+        messages.info(request, 'No products found on this category. Please visit later...')
         return redirect(request.META.get('HTTP_REFERER'), '/')
 
     return render(request, 'shop/categories.html', {'categories': categories})
@@ -186,8 +186,6 @@ def subcategory_products(request, category_id, subcategory_id=None):
 def productDetails(request, id):
     try:
         product = Product.objects.get(pk=id)
-        products_per_row = 4
-
         return render(request, 'shop/products/product.html', {'product': product, 'category': product.category})
     except Product.DoesNotExist:
         messages.warning(request, 'No such product')
