@@ -36,7 +36,7 @@
                                 {% for new_arrival in new_arrivals|slice:"4:8" %}
                                 <div class="col-sm-6 col-md-3 mb-3 mb-md-0 h-100">
                                     <div class="card card-span h-100 text-white"><img class="card-img h-100"
-                                                                                      src='{% static "{{ new_arrival.product_image }}" %}'
+                                                                                      src="{% static new_arrival.product_image %}"
                                                                                       alt="..."/>
                                         <div class="card-img-overlay bg-dark-gradient d-flex flex-column-reverse">
                                             <h6 class="text-primary">{{ new_arrival.selling_price }}</h6>
@@ -56,7 +56,7 @@
                                 {% for new_arrival in new_arrivals|slice:"8:12" %}
                                 <div class="col-sm-6 col-md-3 mb-3 mb-md-0 h-100">
                                     <div class="card card-span h-100 text-white"><img class="card-img h-100"
-                                                                                      src='{% static "{{ new_arrival.product_image }}" %}'
+                                                                                      src="{% static new_arrival.product_image %}"
                                                                                       alt="..."/>
                                         <div class="card-img-overlay bg-dark-gradient d-flex flex-column-reverse">
                                             <h6 class="text-primary">{{ new_arrival.selling_price }}</h6>
@@ -77,8 +77,8 @@
                                     {% for new_arrival in new_arrivals|slice:"12:16" %}
                                     <div class="col-sm-6 col-md-3 mb-3 mb-md-0 h-100">
                                         <div class="card card-span h-100 text-white"><img class="card-img h-100"
-                                                                                          src='{% static "{{ new_arrival.product_image }}" %}'
-                                                                                          alt="..."/>
+                                                                                      src="{% static new_arrival.product_image %}"
+                                                                                      alt="..."/>
                                             <div class="card-img-overlay bg-dark-gradient d-flex flex-column-reverse">
                                                 <h6 class="text-primary">{{ new_arrival.selling_price }}</h6>
                                                 <p class="text-400 fs-1">{{ new_arrival.name }}</p>
@@ -90,7 +90,7 @@
                                 </div>
                                 {% endif %}
 
-                                {% if new_arrivals|slice:"0:4" %}
+                                {% if new_arrivals|slice:"4:8" %}
                                 <div class="row">
                                     <button class="carousel-control-prev" type="button"
                                             data-bs-target="#carouselNewArrivals" data-bs-slide="prev"><span
