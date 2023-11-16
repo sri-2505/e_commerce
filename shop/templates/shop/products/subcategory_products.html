@@ -23,101 +23,95 @@
             </div>
         </div>
 
-        {% if products|slice:"0:4" %}
-        <div class='row'>
-            {% for product in products|slice:"0:4" %}
-            <div class='col-md-3 col-sm-3'>
-                <div class="card-group mx-3">
-                    <div class="card">
-                        <img src="{{ product.product_image.url }}" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ product.name }}</h5>
-                            <p class='card-text'>
-                                <span class='float-start old_price'><s>Rs. {{ product.original_price}} </s></span>
-                                <span class='float-end selling_price'>Rs. {{ product.selling_price}} </span>
-                            </p>
-                        </div>
-                        <div class="card-footer mx-auto">
-                            <a href="{% url 'product' product.id %}" class="btn btn-warning">View Product</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-        {% endif %}
 
-        {% if products|slice:"4:8" %}
-        <div class='row'>
-            {% for product in products|slice:"4:8" %}
-            <div class='col-md-3 col-sm-3'>
-                <div class="card-group mx-3">
-                    <div class="card">
-                        <img src="{{ product.product_image.url }}" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ product.name }}</h5>
-                            <p class='card-text'>
-                                <span class='float-start old_price'><s>Rs. {{ product.original_price}} </s></span>
-                                <span class='float-end selling_price'>Rs. {{ product.selling_price}} </span>
-                            </p>
-                        </div>
-                        <div class="card-footer mx-auto">
-                            <a href="{% url 'product' product.id %}" class="btn btn-warning">View Product</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-        {% endif %}
+        <div class="col-12">
+            <div class="carousel slide" id="carouselNewArrivals" data-bs-ride="carousel">
+                <div class="carousel-inner">
 
-        {% if products|slice:"8:12" %}
-        <div class='row'>
-            {% for product in products|slice:"8:12" %}
-            <div class='col-md-3 col-sm-3'>
-                <div class="card-group mx-3">
-                    <div class="card">
-                        <img src="{{ product.product_image.url }}" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ product.name }}</h5>
-                            <p class='card-text'>
-                                <span class='float-start old_price'><s>Rs. {{ product.original_price}} </s></span>
-                                <span class='float-end selling_price'>Rs. {{ product.selling_price}} </span>
-                            </p>
-                        </div>
-                        <div class="card-footer mx-auto">
-                            <a href="{% url 'product' product.id %}" class="btn btn-warning">View Product</a>
+                    {% if products|slice:"0:4" %}
+                    <div class="carousel-item active" data-bs-interval="10000">
+                        <div class="row h-100 align-items-center g-2">
+                            {% for product in products|slice:"0:4" %}
+                            <div class="col-sm-6 col-md-3 mb-3 mb-md-0 h-100">
+                                <div class="card card-span h-100 t ext-white"><img class="card-img"
+                                                                                   src="{% static product.product_image %}"
+                                                                                   alt="..."/>
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ product.name }}</h5>
+                                        <p class='card-text'>
+                                            <span class='float-start old_price'><s>Rs. {{ product.original_price}} </s></span>
+                                            <span class='float-end selling_price'>Rs. {{ product.selling_price}} </span>
+                                        </p>
+                                    </div>
+                                    <div class="card-footer mx-auto">
+                                        <a href="{% url 'product' product.id %}" class="btn btn-warning">View
+                                            Product</a>
+                                    </div>
+                                </div>
+                                <a class="stretched-link" href="{% url 'product' product.id %}"></a>
+                            </div>
+                            {% endfor %}
                         </div>
                     </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-        {% endif %}
+                    {% endif %}
 
-        {% if products|slice:"12:16" %}
-        <div class='row'>
-            {% for product in products|slice:"12:16" %}
-            <div class='col-md-3 col-sm-3'>
-                <div class="card-group mx-3">
-                    <div class="card">
-                        <img src="{{ product.product_image.url }}" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ product.name }}</h5>
-                            <p class='card-text'>
-                                <span class='float-start old_price'><s>Rs. {{ product.original_price}} </s></span>
-                                <span class='float-end selling_price'>Rs. {{ product.selling_price}} </span>
-                            </p>
-                        </div>
-                        <div class="card-footer mx-auto">
-                            <a href="{% url 'product' product.id %}" class="btn btn-warning">View Product</a>
+                    {% if products|slice:"4:8" %}
+                    <div class="carousel-item active" data-bs-interval="5000">
+                        <div class="row h-100 align-items-center g-2">
+                            {% for product in products|slice:"4:8" %}
+                            <div class="col-sm-6 col-md-3 mb-3 mb-md-0 h-100">
+                                <div class="card card-span h-100 t ext-white"><img class="card-img"
+                                                                                   src="{% static product.product_image %}"
+                                                                                   alt="..."/>
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ product.name }}</h5>
+                                        <p class='card-text'>
+                                            <span class='float-start old_price'><s>Rs. {{ product.original_price}} </s></span>
+                                            <span class='float-end selling_price'>Rs. {{ product.selling_price}} </span>
+                                        </p>
+                                    </div>
+                                    <div class="card-footer mx-auto">
+                                        <a href="{% url 'product' product.id %}" class="btn btn-warning">View
+                                            Product</a>
+                                    </div>
+                                </div>
+                                <a class="stretched-link" href="{% url 'product' product.id %}"></a>
+                            </div>
+                            {% endfor %}
                         </div>
                     </div>
+                    {% endif %}
+
+                    {% if products|slice:"8:12" %}
+                    <div class="carousel-item active" data-bs-interval="3000">
+                        <div class="row h-100 align-items-center g-2">
+                            {% for product in products|slice:"8:12" %}
+                            <div class="col-sm-6 col-md-3 mb-3 mb-md-0 h-100">
+                                <div class="card card-span h-100 t ext-white"><img class="card-img"
+                                                                                   src="{% static product.product_image %}"
+                                                                                   alt="..."/>
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ product.name }}</h5>
+                                        <p class='card-text'>
+                                            <span class='float-start old_price'><s>Rs. {{ product.original_price}} </s></span>
+                                            <span class='float-end selling_price'>Rs. {{ product.selling_price}} </span>
+                                        </p>
+                                    </div>
+                                    <div class="card-footer mx-auto">
+                                        <a href="{% url 'product' product.id %}" class="btn btn-warning">View
+                                            Product</a>
+                                    </div>
+                                </div>
+                                <a class="stretched-link" href="{% url 'product' product.id %}"></a>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+
                 </div>
             </div>
-            {% endfor %}
         </div>
-        {% endif %}
     </div>
 </section>
 

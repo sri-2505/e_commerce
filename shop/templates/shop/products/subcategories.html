@@ -25,13 +25,12 @@
             <div class="col-12">
                 <div class="carousel slide" id="carouselNewArrivals" data-bs-ride="carousel">
                     <div class="carousel-inner">
-
                         {% if subcategory.limited_products|slice:"0:4" %}
                         <div class="carousel-item active" data-bs-interval="10000">
                             <div class="row h-100 align-items-center g-2">
                                 {% for product in subcategory.limited_products|slice:"0:4" %}
                                 <div class="col-sm-6 col-md-3 mb-3 mb-md-0 h-100">
-                                    <div class="card card-span h-100 t ext-white"><img class="card-img h-100"
+                                    <div class="card card-span h-100 t ext-white"><img class="card-img"
                                                                                        src="{% static product.product_image %}"
                                                                                        alt="..."/>
                                         <div class="card-img-overlay"></div>
@@ -60,7 +59,7 @@
                             <div class="row h-100 align-items-center g-2">
                                 {% for product in subcategory.limited_products|slice:"4:8" %}
                                 <div class="col-sm-6 col-md-3 mb-3 mb-md-0 h-100">
-                                    <div class="card card-span h-100 t ext-white"><img class="card-img h-100"
+                                    <div class="card card-span h-100 t ext-white"><img class="card-img"
                                                                                        src="{% static product.product_image %}"
                                                                                        alt="..."/>
                                         <div class="card-img-overlay"></div>
@@ -83,7 +82,7 @@
                             <div class="row h-100 align-items-center g-2">
                                 {% for product in subcategory.limited_products|slice:"8:12" %}
                                 <div class="col-sm-6 col-md-3 mb-3 mb-md-0 h-100">
-                                    <div class="card card-span h-100 t ext-white"><img class="card-img h-100"
+                                    <div class="card card-span h-100 t ext-white"><img class="card-img"
                                                                                        src="{% static product.product_image %}"
                                                                                        alt="..."/>
                                         <div class="card-img-overlay"></div>
@@ -107,7 +106,7 @@
                                 <div class="col-sm-6 col-md-3 mb-3 mb-md-0 h-100">
                                     {% for product in subcategory.limited_products|slice:"12:16" %}
                                     <div class="col-sm-6 col-md-3 mb-3 mb-md-0 h-100">
-                                    <div class="card card-span h-100 t ext-white"><img class="card-img h-100"
+                                    <div class="card card-span h-100 t ext-white"><img class="card-img"
                                                                                        src="{% static product.product_image %}"
                                                                                        alt="..."/>
                                         <div class="card-img-overlay"></div>
@@ -144,7 +143,7 @@
 
             <div class="row my-3">
                 <div class="col-12 text-end">
-                    <h4><a class="text-secondary"><u>See more</u></a></h4>
+                    <h4><a class="text-secondary" href="{% url 'subcategory_products' subcategory.category.id subcategory.id %}"><u>See more</u></a></h4>
                 </div>
             </div>
 
