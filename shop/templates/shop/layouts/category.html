@@ -15,7 +15,7 @@
                             <button class="nav-link {% if forloop.counter == 1 %} active {% endif %}"
                                     id="nav-{{ category.name }}-tab" data-bs-toggle="tab"
                                     data-bs-target="#nav-{{ category.name }}" type="button" role="tab"
-                                    aria-controls="nav-{{ category.name }}" aria-selected="true">{{ category.name }}
+                                    aria-controls="nav-{{ category.name }}" aria-selected="true">{{ category.name|capfirst }}
                             </button>
                         {% endfor %}
                     </div>
@@ -85,8 +85,7 @@
                                                                 src="{% static product.product_image %}" alt="..."/>
                                                             <div class="card-img-overlay ps-0"></div>
                                                             <div class="card-body ps-0 bg-200">
-                                                                <h5 class="fw-bold text-1000 text-truncate">{{
-                                                                    product.name }}</h5>
+                                                                <h5 class="fw-bold text-1000 text-truncate">{{ product.name }}</h5>
                                                                 <div class="fw-bold"><span
                                                                         class="text-600 me-2 text-decoration-line-through">{{ product.original_price }}</span><span
                                                                         class="text-primary">{{ product.original_price }}</span>
@@ -112,8 +111,7 @@
                                                                 src="{% static product.product_image %}" alt="..."/>
                                                             <div class="card-img-overlay ps-0"></div>
                                                             <div class="card-body ps-0 bg-200">
-                                                                <h5 class="fw-bold text-1000 text-truncate">{{
-                                                                    product.name }}</h5>
+                                                                <h5 class="fw-bold text-1000 text-truncate">{{ product.name }}</h5>
                                                                 <div class="fw-bold"><span
                                                                         class="text-600 me-2 text-decoration-line-through">{{ product.original_price }}</span><span
                                                                         class="text-primary">{{ product.original_price }}</span>
@@ -127,7 +125,6 @@
                                             </div>
                                             {% endif %}
 
-                                            {% if best_deals|slice:"4:8" %}
                                             <div class="row">
                                                 <button class="carousel-control-prev" type="button"
                                                         data-bs-target="#carouselCategory{{ subcategory.name|capfirst }}"
@@ -140,7 +137,6 @@
                                                                                    aria-hidden="true"></span><span
                                                         class="visually-hidden">Next </span></button>
                                             </div>
-                                            {% endif %}
 
                                         </div>
                                     </div>
