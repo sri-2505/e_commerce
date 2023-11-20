@@ -24,7 +24,7 @@ def send_order_details_mail(user_email, body):
         )
 
         email.content_subtype = 'html'
-        email.send(fail_silently=False)
+        email.send(fail_silently=True)
     except Exception as e:
         logger.critical(f'Order email not sent.-  {e}')
 
@@ -48,6 +48,6 @@ def send_cart_abundance_mail():
             )
 
             email.content_subtype = 'html'
-            email.send(fail_silently=False)
+            email.send(fail_silently=True)
     except Exception as e:
         logger.warning(f'cart abundance mail did not sent. - {e}')
