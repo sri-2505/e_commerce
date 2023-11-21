@@ -36,7 +36,7 @@
                                                                                           alt="..."/>
                                             <div class="card-img-overlay ps-0"></div>
                                             <div class="card-body ps-0 bg-200">
-                                                <h5 class="fw-bold text-1000 text-truncate">{{ subcategory.name }}</h5>
+                                                <h5 class="fw-bold text-center">{{ subcategory.name|capfirst }}</h5>
                                             </div>
                                             <a class="stretched-link"
                                                href="{% url 'subcategory_products' category.id subcategory.id %}"></a>
