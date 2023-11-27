@@ -19,7 +19,7 @@ urlpatterns = [
     path('subcategories/<str:subcategory>', views.subcategories, name='exclusive_with_argument'),
 
     # product details
-    path('product/<int:id>', views.productDetails, name='product'),
+    path('product/<int:id>', views.product_details, name='product'),
 
 
     # add to cart - ajax request
