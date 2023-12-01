@@ -1,5 +1,4 @@
 # e_commerce 
-Live preview(srikanth.world) is not avaialable as of now. Due to some aws cost. Sorry for the inconvenience.
 
 Created a basic e-commerce website for learning the django.
 
