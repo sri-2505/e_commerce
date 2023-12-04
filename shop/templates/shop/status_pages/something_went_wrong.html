@@ -16,7 +16,9 @@
         {% endif %}
         
         {% if message %}
-          <h2>{{ message }}</h2>
+          <h2>{{ message }}</h2>%%
+        {% else %}
+          <h2>Something went wrong.</h2>
         {% endif %}
         <img src="{% static 'images/not-found.svg' %}" class="img img-fluid">
       </section>
