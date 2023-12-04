@@ -1,0 +1,30 @@
+{% extends "shop/layouts/main.html" %}
+{% load static %}
+
+{% block title %}
+<title>Feature will come coon</title>
+{% endblock title %}
+
+{% block content %}
+<div class="container">
+
+  <div class='row'>
+    <div class='col-8 mx-auto'>
+      <section class="section error-404 min-vh-100 d-flex flex-column align-items-center justify-content-center">
+        {% if status_code %}
+        <h1>{{ status_code }}</h1>
+        {% endif %}
+        
+        {% if message %}
+          <h2>{{ message }}</h2>%%
+        {% else %}
+          <h2>Something went wrong.</h2>
+        {% endif %}
+        <img src="{% static 'images/not-found.svg' %}" class="img img-fluid">
+      </section>
+    </div>
+<div>
+    </div>
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  {% endblock content %}
